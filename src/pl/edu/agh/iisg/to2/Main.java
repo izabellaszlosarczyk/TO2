@@ -24,5 +24,5 @@ public class Main extends Application {
 		System.out.println("Running...");
 		launch(args);
 	}
-
+	
 }

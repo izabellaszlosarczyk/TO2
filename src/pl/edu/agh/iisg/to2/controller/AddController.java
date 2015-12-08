@@ -108,6 +108,7 @@ public class AddController {
 			updateModel();
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();
+			//sprawdz
 		}
 	}
 
