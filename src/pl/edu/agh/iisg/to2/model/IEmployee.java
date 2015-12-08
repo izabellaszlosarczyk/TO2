@@ -1,6 +1,12 @@
-package com.agh.to2.model;
+package pl.edu.agh.iisg.to2.model;
+
+import java.math.BigDecimal;
 
 public interface IEmployee {
+	
+	String getId();
+
+	void setId(BigDecimal id);
 
 	String getFirstName();
 

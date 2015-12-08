@@ -1,15 +1,22 @@
-package com.agh.to2.mock;
+package pl.edu.agh.iisg.to2.model;
 
-import com.agh.to2.model.IEmployee;
+import java.math.BigDecimal;
 
-public class Employee implements IEmployee {
-
+public class EmployeeMock implements IEmployee {
+	private String firstName;
+	private String lastName;
+	
+	public EmployeeMock(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
     /* (non-Javadoc)
 	 * @see com.agh.to2.mock.IEmployee#getFirstName()
 	 */
     @Override
 	public String getFirstName() {
-    	return null;
+    	return firstName;
     }
 
     /* (non-Javadoc)
@@ -24,7 +31,7 @@ public class Employee implements IEmployee {
 	 */
     @Override
 	public String getLastName() {
-    	return null;
+    	return lastName;
     }
 
     /* (non-Javadoc)
@@ -108,4 +115,15 @@ public class Employee implements IEmployee {
     @Override
 	public void setEmail(String email) {
     }
+
+	@Override
+	public String getId() {
+		return firstName + " " + lastName;
+	}
+
+	@Override
+	public void setId(BigDecimal id) {
+		// TODO Auto-generated method stub
+		
+	}
 }
