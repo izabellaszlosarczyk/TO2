@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -36,6 +37,7 @@ import pl.edu.agh.iisg.to2.model.ProjectMock;
 public class ListController {
 
 	private ProjectController controller;
+	private ProjectMock projectToEdit;
 
 	@FXML private TableView<ProjectMock> projectTable;
 	//@FXML private TableColumn<ProjectMock, String> idColumn;
@@ -75,23 +77,34 @@ public class ListController {
 		employeesColumn.setCellValueFactory(value -> value.getValue().getStringEmployees());
 		
 		deleteButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
+		editButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
+		 
 	}
 	
 	private void initializeWithArguments() {
 		String pattern = "yyyy-MM-dd";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		converter = new LocalDateStringConverter(formatter, formatter);
+		converter = new LocalDateStringConverter(formatter, formatter); 
 		
 		ObjectProperty<LocalDate> deadline = new SimpleObjectProperty<LocalDate>(converter.fromString(paramDeadline.getText()));
 		ObjectProperty<LocalDate> startdate = new SimpleObjectProperty<LocalDate>(converter.fromString(paramStartDate.getText()));
 		String id = new String(paramId.getText());
+		String employees = new String(paramId.getText());
+		String teams = new String(paramId.getText());
 		
-		ObservableList<ProjectMock> projectsWithParam = FXCollections.observableArrayList();
+		ObservableList<ProjectMock> tmp1 = FXCollections.observableArrayList();
+		tmp1.addAll(controller.getProjects());
+		for (ProjectMock m: tmp1){
+			// TODO : implementation 
+		}
 	}
+	
+
 
 	@FXML
 	private void handleDeleteAction(ActionEvent event) {
 		projectTable.getItems().removeAll(projectTable.getSelectionModel().getSelectedItems());
+		//TODO: implement 
 	}
 	
 	@FXML
@@ -129,6 +142,9 @@ public class ListController {
 
 	@FXML
 	private void handleEditAction(ActionEvent event) {
+		ProjectMock p = new ProjectMock();
+		p =  projectTable.getSelectionModel().getSelectedItem();
+		setProjectToEdit(p);
 		Parent root;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -158,6 +174,14 @@ public class ListController {
 
 	public void setProjectController(ProjectController projectController) {
 		this.projectController = projectController;
+	}
+
+	public ProjectMock getProjectToEdit() {
+		return projectToEdit;
+	}
+
+	public void setProjectToEdit(ProjectMock projectToEdit) {
+		this.projectToEdit = projectToEdit;
 	}
 
 	

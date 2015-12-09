@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.iisg.to2.controller.EditController">
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.iisg.to2.controller.AddController">
 	<center>
 		<GridPane hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
 			<columnConstraints>
@@ -20,6 +20,7 @@
 				<RowConstraints minHeight="10.0" />
 				<RowConstraints minHeight="10.0" />
 				<RowConstraints minHeight="10.0" />
+            <RowConstraints minHeight="10.0" />
 			</rowConstraints>
 			<children>
 				<Label text="Deadline">
@@ -27,7 +28,7 @@
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</Label>
-				<Label text="StartDate">
+				<Label text="StartDate" GridPane.rowIndex="1">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
@@ -47,16 +48,6 @@
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</Label>
-				<TextField fx:id="deadlineTextField" GridPane.columnIndex="1">
-					<GridPane.margin>
-						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-					</GridPane.margin>
-				</TextField>
-				<TextField fx:id="startdateTextField" GridPane.columnIndex="1">
-					<GridPane.margin>
-						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
-					</GridPane.margin>
-				</TextField>
 				<TextField fx:id="employeesTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
@@ -72,6 +63,8 @@
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</TextField>
+            <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" />
+            <DatePicker fx:id="startdateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
 			</children>
 		</GridPane>
@@ -91,7 +84,7 @@
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin></Button>
-				 <Button fx:id="cancelButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCancelAction" text="Okey">
+				 <Button fx:id="cancelButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCancelAction" text="Cancel">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin></Button>
@@ -105,6 +98,3 @@
 		<Insets />
 	</opaqueInsets>
 </BorderPane>
-
-
-         

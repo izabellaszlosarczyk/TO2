@@ -101,8 +101,9 @@ public class AddController {
 			error.setTextFill(Color.RED);
 			error.setText("Error: You have blank spaces");
 		} else {
-			ProjectMock project = new ProjectMock();
-			controller.addProjects(project);
+			ProjectMock project1 = new ProjectMock();
+			project1 = this.project;
+			controller.addProjects(project1);
 		}
 		if (isInputValid()) {
 			updateModel();
@@ -121,6 +122,7 @@ public class AddController {
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
 		dialogStage.close();
+		// okno dla dodawania pracownikow
 	}
 	
 	@FXML
@@ -129,7 +131,7 @@ public class AddController {
 	}
 
 	private boolean isInputValid() {
-		// TODO: implement
+		
 		return true;
 	}
 

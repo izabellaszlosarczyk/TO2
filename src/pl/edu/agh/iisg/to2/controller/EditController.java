@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -40,10 +41,10 @@ import static java.lang.Math.toIntExact;
 public class EditController {
 
 	private ProjectController controller;
-
+	private ListController listController;
 	
-	@FXML private TextField deadlineTextField;
-	@FXML private TextField startdateTextField;
+	@FXML private DatePicker deadlineDatePicker;
+	@FXML private DatePicker startdateDatePicker;
 	@FXML private TextField employeesTextField;
 	@FXML private TextField teamsTextField;
 	@FXML private TextField budgetTextField;
@@ -68,7 +69,17 @@ public class EditController {
 		String pattern = "yyyy-MM-dd";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 		converter = new LocalDateStringConverter(formatter, formatter);
+		deadlineDatePicker = new DatePicker(LocalDate.now());
+		startdateDatePicker = new DatePicker(LocalDate.now());
 
+	}
+	
+	public ProjectController getController() {
+		return controller;
+	}
+
+	public void setController(ProjectController controller) {
+		this.controller = controller;
 	}
 
 	public void setDialogStage(Stage dialogStage) {
@@ -86,22 +97,26 @@ public class EditController {
 	
 	@FXML
 	private void handleOkAction(ActionEvent event) {
-		if (isInputValid()) {
-			updateModel();
-			approved = true;
-			dialogStage.close();
-		}
+		approved = true;
 		if (!isApproved()) {
 			error.setTextFill(Color.RED);
 			error.setText("Error: You have blank spaces");
 		} else {
+			ProjectMock project = new ProjectMock();
 			controller.addProjects(project);
+		}
+		if (isInputValid()) {
+			updateModel();
+			Stage stage = (Stage) cancelButton.getScene().getWindow();
+			stage.close();
+			//sprawdz
 		}
 	}
 	
 	@FXML
 	private void handleCancelAction(ActionEvent event) {
-		dialogStage.close();
+		Stage stage = (Stage) cancelButton.getScene().getWindow();
+		stage.close();
 	}
 
 	@FXML
@@ -125,9 +140,10 @@ public class EditController {
 		converter = new LocalDateStringConverter(formatter, formatter);
 		
 		StringProperty s1 =  new SimpleStringProperty(converter.fromString(teamsTextField.getText()), pattern); 
+		ProjectMock project = new ProjectMock();
 		
-		project.setDeadline(new SimpleObjectProperty<LocalDate>(converter.fromString(deadlineTextField.getText())));
-		project.setStartdate(new SimpleObjectProperty<LocalDate>(converter.fromString(startdateTextField.getText())));
+		project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
+		project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
 		project.setTeamsFromString(teamsTextField.getText());
 		project.setEmployeesFromString(employeesTextField.getText());
 
@@ -137,11 +153,11 @@ public class EditController {
 	}
 
 	private void updateControls() {
-		deadlineTextField.setText(project.getDeadline().toString());
-		startdateTextField.setText(project.getStartdate().toString());
-		employeesTextField.setText(project.getStringEmployees().toString());
-		teamsTextField.setText(project.getStringTeams().toString());
-		budgetTextField.setText(project.getBudget().toString());
+		deadlineDatePicker.setValue(listController.getProjectToEdit().getDeadline().getValue());
+		deadlineDatePicker.setValue(listController.getProjectToEdit().getStartdate().getValue());
+		employeesTextField.setText(listController.getProjectToEdit().getStringEmployees().toString());
+		teamsTextField.setText(listController.getProjectToEdit().getStringTeams().toString());
+		budgetTextField.setText(listController.getProjectToEdit().getBudget().toString());
 		
 	}
 	
@@ -162,5 +178,13 @@ public class EditController {
 			return 1;
 			else
 				return 0;
+	}
+
+	public ListController getListController() {
+		return listController;
+	}
+
+	public void setListController(ListController listController) {
+		this.listController = listController;
 	}
 }
