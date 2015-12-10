@@ -36,11 +36,8 @@ import pl.edu.agh.iisg.to2.model.ProjectMock;
 
 public class ListController {
 
-	private ProjectController controller;
-	private ProjectMock projectToEdit;
 
 	@FXML private TableView<ProjectMock> projectTable;
-	//@FXML private TableColumn<ProjectMock, String> idColumn;
 	@FXML private TableColumn<ProjectMock, LocalDate> deadlineColumn;
 	@FXML private TableColumn<ProjectMock, LocalDate> startDateColumn;
 	@FXML private TableColumn<ProjectMock, String> employeesColumn;
@@ -59,23 +56,21 @@ public class ListController {
 	@FXML private TextField paramEmployees;
 	@FXML private TextField paramTeams;
 	
-	private LocalDateStringConverter converter;	
-	
-	private ProjectController projectController;
-	
+	private LocalDateStringConverter converter;
+	private ProjectController projController; 
+	private ObservableList<ProjectMock> projects;
+
 	
 	@FXML
 	private void initialize() {
 		
 		projectTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		
-		//idColumn.setCellValueFactory(dataValue -> dataValue.getValue().getId());
 		budgetColumn.setCellValueFactory(value -> value.getValue().getBudget());
 		deadlineColumn.setCellValueFactory(dataValue -> dataValue.getValue().getDeadline());
 		startDateColumn.setCellValueFactory(dataValue -> dataValue.getValue().getStartdate());
 		teamsColumn.setCellValueFactory(value -> value.getValue().getStringTeams());
 		employeesColumn.setCellValueFactory(value -> value.getValue().getStringEmployees());
-		
 		deleteButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
 		editButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
 		 
@@ -92,14 +87,13 @@ public class ListController {
 		String employees = new String(paramId.getText());
 		String teams = new String(paramId.getText());
 		
-		ObservableList<ProjectMock> tmp1 = FXCollections.observableArrayList();
+		/*ObservableList<ProjectMock> tmp1 = FXCollections.observableArrayList();
 		tmp1.addAll(controller.getProjects());
 		for (ProjectMock m: tmp1){
-			// TODO : implementation 
-		}
+			 TODO : implementation 
+		}*/
 	}
 	
-
 
 	@FXML
 	private void handleDeleteAction(ActionEvent event) {
@@ -120,19 +114,24 @@ public class ListController {
 
 	@FXML
 	private void handleAddAction(ActionEvent event) {
-		Parent root;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(Main.class.getResource("view/AddView.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Add project");
-            stage.setScene(new Scene(root1));  
-            AddController addController = (AddController) fxmlLoader.getController();
-            addController.setController(this.projectController);
+            FXMLLoader fxmlLoaderAdd = new FXMLLoader();
+            fxmlLoaderAdd.setLocation(Main.class.getResource("view/AddView.fxml"));
+            Parent root1 = (Parent) fxmlLoaderAdd.load();
+            
+            Stage stageAdd = new Stage();
+            stageAdd.initModality(Modality.APPLICATION_MODAL);
+            stageAdd.setTitle("Add project");
+            stageAdd.setScene(new Scene(root1));  
 
-            stage.showAndWait();
+            AddController controllerAdd = fxmlLoaderAdd.getController();
+			controllerAdd.setDialogStage(stageAdd);
+			for (ProjectMock tmp: projectTable.getItems()){
+			System.out.println(tmp.getId());
+			}
+			controllerAdd.setData(projectTable.getItems());
+			
+            stageAdd.showAndWait();
             System.out.println("Refreshing...");
             projectTable.refresh(); 
         } catch (IOException e) {
@@ -144,45 +143,42 @@ public class ListController {
 	private void handleEditAction(ActionEvent event) {
 		ProjectMock p = new ProjectMock();
 		p =  projectTable.getSelectionModel().getSelectedItem();
-		setProjectToEdit(p);
-		Parent root;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(Main.class.getResource("view/EditView.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Edit project");
-            stage.setScene(new Scene(root1)); 
-            stage.show();
+            FXMLLoader fxmlLoaderEdit = new FXMLLoader();
+            fxmlLoaderEdit.setLocation(Main.class.getResource("view/EditView.fxml"));
+            Parent root1 = (Parent) fxmlLoaderEdit.load();
+            Stage stageEdit = new Stage();
+            stageEdit.initModality(Modality.APPLICATION_MODAL);
+            stageEdit.setTitle("Edit project");
+            stageEdit.setScene(new Scene(root1)); 
+            
+            EditController controllerEdit = fxmlLoaderEdit.getController();
+            controllerEdit.setDialogStage(stageEdit);
+            controllerEdit.setData(p);
+            
+            stageEdit.showAndWait();
+            projectTable.refresh(); 
+            
+            System.out.println("Refreshing...");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
+        
 	}
 	
 	public void setData(ObservableList<ProjectMock> p) {
 		projectTable.getItems().setAll(p);
+
 	}
 	
-	public void setAppController(ProjectController controller) {
-		this.controller = controller;
+	public ProjectController getProjController() {
+		return projController;
 	}
 
-	public ProjectController getProjectController() {
-		return projectController;
+	public void setProjController(ProjectController projController) {
+		this.projController = projController;
 	}
 
-	public void setProjectController(ProjectController projectController) {
-		this.projectController = projectController;
-	}
-
-	public ProjectMock getProjectToEdit() {
-		return projectToEdit;
-	}
-
-	public void setProjectToEdit(ProjectMock projectToEdit) {
-		this.projectToEdit = projectToEdit;
-	}
-
+	
 	
 }

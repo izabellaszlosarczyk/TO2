@@ -40,25 +40,21 @@ import static java.lang.Math.toIntExact;
 
 public class EditController {
 
-	private ProjectController controller;
-	private ListController listController;
-	
 	@FXML private DatePicker deadlineDatePicker;
 	@FXML private DatePicker startdateDatePicker;
 	@FXML private TextField employeesTextField;
 	@FXML private TextField teamsTextField;
 	@FXML private TextField budgetTextField;
 	
-	
-	@FXML private Button addEmployeesButton;
-	@FXML private Button addTeamsButton;
+	@FXML private Button editEmployeesButton;
+	@FXML private Button editTeamsButton;
 	@FXML private Button cancelButton;
 	@FXML private Button okButton;
 	@FXML private Label error;
 	
 
 	private Stage dialogStage;
-	private ProjectMock project;
+	private ProjectMock projectEdit;
 	private boolean approved;
 
 	private LocalDateStringConverter converter;
@@ -68,26 +64,14 @@ public class EditController {
 	public void initialize() {
 		String pattern = "yyyy-MM-dd";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		converter = new LocalDateStringConverter(formatter, formatter);
+		setConverter(new LocalDateStringConverter(formatter, formatter));
 		deadlineDatePicker = new DatePicker(LocalDate.now());
 		startdateDatePicker = new DatePicker(LocalDate.now());
 
 	}
-	
-	public ProjectController getController() {
-		return controller;
-	}
-
-	public void setController(ProjectController controller) {
-		this.controller = controller;
-	}
-
-	public void setDialogStage(Stage dialogStage) {
-		this.dialogStage = dialogStage;
-	}
 
 	public void setData(ProjectMock project) {
-		this.project = project;
+		this.projectEdit = project;
 		updateControls();
 	}
 
@@ -102,21 +86,19 @@ public class EditController {
 			error.setTextFill(Color.RED);
 			error.setText("Error: You have blank spaces");
 		} else {
-			ProjectMock project = new ProjectMock();
-			controller.addProjects(project);
+			updateModel();
+			approved = true;
 		}
 		if (isInputValid()) {
 			updateModel();
-			Stage stage = (Stage) cancelButton.getScene().getWindow();
-			stage.close();
+			dialogStage.close();
 			//sprawdz
 		}
 	}
 	
 	@FXML
 	private void handleCancelAction(ActionEvent event) {
-		Stage stage = (Stage) cancelButton.getScene().getWindow();
-		stage.close();
+		dialogStage.close();
 	}
 
 	@FXML
@@ -135,38 +117,29 @@ public class EditController {
 	}
 
 	private void updateModel() {
-		String pattern = "yyyy-MM-dd";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		converter = new LocalDateStringConverter(formatter, formatter);
 		
-		StringProperty s1 =  new SimpleStringProperty(converter.fromString(teamsTextField.getText()), pattern); 
-		ProjectMock project = new ProjectMock();
-		
-		project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-		project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-		project.setTeamsFromString(teamsTextField.getText());
-		project.setEmployeesFromString(employeesTextField.getText());
+		projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
+		projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		projectEdit.setTeamsFromString(teamsTextField.getText());
+		projectEdit.setEmployeesFromString(employeesTextField.getText());
 
-		DecimalFormat decimalFormatter = new DecimalFormat();
-		decimalFormatter.setParseBigDecimal(true);
 
 	}
 
 	private void updateControls() {
-		deadlineDatePicker.setValue(listController.getProjectToEdit().getDeadline().getValue());
-		deadlineDatePicker.setValue(listController.getProjectToEdit().getStartdate().getValue());
-		employeesTextField.setText(listController.getProjectToEdit().getStringEmployees().toString());
-		teamsTextField.setText(listController.getProjectToEdit().getStringTeams().toString());
-		budgetTextField.setText(listController.getProjectToEdit().getBudget().toString());
-		
+		deadlineDatePicker.setValue(getProjectEdit().getDeadline().getValue());
+		deadlineDatePicker.setValue(getProjectEdit().getStartdate().getValue());
+		employeesTextField.setText(getProjectEdit().getStringEmployees().toString());
+		teamsTextField.setText(getProjectEdit().getStringTeams().toString());
+		budgetTextField.setText(getProjectEdit().getBudget().toString());	
 	}
 	
 	private int calculateBudget(){
-		long days = ChronoUnit.DAYS.between(project.getDeadline().getValue(), project.getStartdate().getValue());
+		long days = ChronoUnit.DAYS.between(getProjectEdit().getDeadline().getValue(), getProjectEdit().getStartdate().getValue());
 		int daysInt = toIntExact(days);
 		int cost = 0;
-		for (IEmployee e: project.getEmployees() ) cost += e.getSalary();
-		for (ITeam t: project.getTeams() ) cost += t.getCostOfTeam().intValueExact() ;
+		for (IEmployee e: getProjectEdit().getEmployees() ) cost += e.getSalary();
+		for (ITeam t: getProjectEdit().getTeams() ) cost += t.getCostOfTeam().intValueExact() ;
 		// TODO: implement
 		cost = cost*daysInt*8; 
 		
@@ -180,11 +153,25 @@ public class EditController {
 				return 0;
 	}
 
-	public ListController getListController() {
-		return listController;
+
+	public ProjectMock getProjectEdit() {
+		return projectEdit;
 	}
 
-	public void setListController(ListController listController) {
-		this.listController = listController;
+	public void setProjectEdit(ProjectMock projectEdit) {
+		this.projectEdit = projectEdit;
+	}
+	
+	
+	public void setDialogStage(Stage dialogStage) {
+		this.dialogStage = dialogStage;
+	}
+
+	public LocalDateStringConverter getConverter() {
+		return converter;
+	}
+
+	public void setConverter(LocalDateStringConverter converter) {
+		this.converter = converter;
 	}
 }

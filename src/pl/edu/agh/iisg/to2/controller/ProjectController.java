@@ -12,11 +12,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.iisg.to2.Main;
+import pl.edu.agh.iisg.to2.model.IEmployee;
+import pl.edu.agh.iisg.to2.model.ITeam;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
 
 public class ProjectController {
 
 	private ObservableList<ProjectMock> projects;
+	private ObservableList<ITeam> teams;
+	private ObservableList<IEmployee> employees;
 	private Stage primaryStage;
 
 	public ProjectController(Stage primaryStage) {
@@ -36,10 +40,10 @@ public class ProjectController {
 	}
 	
 	public void generateMockData() {
-		projects = FXCollections.observableArrayList();
-		for(int i = 0; i < 10; i++) {
-			ProjectMock p = new ProjectMock(LocalDate.now(), LocalDate.of(2010, 3, i+5), "" + i + "MockTeam", "Pracownicy", new BigDecimal(i));
-			projects.add(p);	
+		this.projects = FXCollections.observableArrayList();
+		for(int i = 0; i < 15; i++) {
+			ProjectMock p = new ProjectMock("projekt tmp id:"+ i, LocalDate.now(), LocalDate.of(2010, 3, i+5), "" + i + "MockTeam", "Pracownicy", new BigDecimal(i));
+			this.projects.add(p);	
 		}
 	}
 	
@@ -47,26 +51,25 @@ public class ProjectController {
 		try {
 			this.primaryStage.setTitle("Project");
 
-			// load layout from FXML file
+			/*for (ProjectMock tmp: this.getProjects()){
+				System.out.println(tmp.getId());
+			}*/
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("view/ListView.fxml"));
 			BorderPane rootLayout = (BorderPane) loader.load();
 			
-			// set initial data into controller
 			ListController controller = loader.getController();
-			controller.setAppController(this);
 			generateMockData();
 			controller.setData(projects);
-			controller.setProjectController(this);
-
-			// add layout to a scene and show them all
+			controller.setProjController(this);
+			
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
-			// don't do this in common apps
 			e.printStackTrace();
 		}
+		
 
 	}
 

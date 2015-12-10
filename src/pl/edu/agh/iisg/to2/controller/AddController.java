@@ -15,6 +15,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DataFormat;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -41,7 +43,7 @@ import pl.edu.agh.iisg.to2.model.ProjectMock;
 public class AddController {
 
 	private ProjectController controller;
-
+	
 
 	@FXML private DatePicker deadlineDatePicker;
 	@FXML private DatePicker startdateDatePicker;
@@ -58,6 +60,7 @@ public class AddController {
 
 	private Stage dialogStage;
 	private ProjectMock project;
+	private ObservableList<ProjectMock> projectsTmp;
 	private boolean approved;
 
 	private LocalDateStringConverter converter;
@@ -65,6 +68,7 @@ public class AddController {
 	
 	@FXML
 	public void initialize() {
+		this.project = new ProjectMock();
 		String pattern = "yyyy-MM-dd";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 		converter = new LocalDateStringConverter(formatter, formatter);
@@ -84,9 +88,9 @@ public class AddController {
 		this.dialogStage = dialogStage;
 	}
 
-	public void setData(ProjectMock project) {
-		this.project = project;
-		updateControls();
+	public void setData(ObservableList<ProjectMock> projects) {
+		this.projectsTmp = FXCollections.observableArrayList();
+		projectsTmp.addAll(projects);
 	}
 
 	public boolean isApproved() {
@@ -122,7 +126,17 @@ public class AddController {
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
 		dialogStage.close();
-		// okno dla dodawania pracownikow
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("AddEmployee.fxml"));
+        /*AnchorPane page = (AnchorPane) loader.load();
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Add Employee");
+        Scene scene = new Scene(page);
+        dialogStage.setScene(scene);
+        //controller.setStage(dialogStage);
+        //nameController.setPerson(person);
+        dialogStage.show();
+		 okno dla dodawania pracownikow*/
 	}
 	
 	@FXML
@@ -138,28 +152,14 @@ public class AddController {
 	private void updateModel() {
 		String pattern = "yyyy-MM-dd";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		
-		ProjectMock project = new ProjectMock();
 
 		project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
 		project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
 		project.setTeamsFromString(teamsTextField.getText());
 		project.setEmployeesFromString(employeesTextField.getText());
 
-		DecimalFormat decimalFormatter = new DecimalFormat();
-		decimalFormatter.setParseBigDecimal(true);
-
 	}
 
-
-	private void updateControls() {
-		deadlineDatePicker.setValue(project.getDeadline().getValue());
-		deadlineDatePicker.setValue(project.getStartdate().getValue());
-		employeesTextField.setText(project.getStringEmployees().toString());
-		teamsTextField.setText(project.getStringTeams().toString());
-		budgetTextField.setText(project.getBudget().toString());
-		
-	}
 	
 	private int calculateBudget(){
 		long days = ChronoUnit.DAYS.between(project.getDeadline().getValue(), project.getStartdate().getValue());

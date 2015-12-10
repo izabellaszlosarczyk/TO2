@@ -21,6 +21,8 @@
 				<RowConstraints minHeight="10.0" />
 				<RowConstraints minHeight="10.0" />
             <RowConstraints minHeight="10.0" />
+            <RowConstraints minHeight="10.0" />
+            <RowConstraints minHeight="10.0" />
 			</rowConstraints>
 			<children>
 				<Label text="Deadline">
@@ -65,6 +67,8 @@
 				</TextField>
             <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" />
             <DatePicker fx:id="startdateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				 <Button fx:id="addEmployeesButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddEmployeesAction" text="AddEmployees" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                 <Button fx:id="addTeamsButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTeamsAction" text="AddTeams" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
 			</children>
 		</GridPane>
@@ -72,14 +76,6 @@
 	<bottom>
 		<HBox alignment="BOTTOM_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
 			<children>
-				 <Button fx:id="addEmployeesButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddEmployeesAction" text="AddEmployees">
-				<HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin></Button>
-                 <Button fx:id="addTeamsButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTeamsAction" text="AddTeams">
-               <HBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </HBox.margin></Button>
 				 <Button fx:id="okButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOkAction" text="Okey">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

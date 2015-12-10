@@ -27,8 +27,8 @@ public class ProjectMock implements IProject {
 		this.id = UUID.randomUUID().toString();
 	}
 	 
-	public ProjectMock(LocalDate deadline, LocalDate startdate, String teams, String employees, BigDecimal budget) {
-		this.id = UUID.randomUUID().toString();
+	public ProjectMock(String id,LocalDate deadline, LocalDate startdate, String teams, String employees, BigDecimal budget) {
+		this.id = id;
 		this.deadline = new SimpleObjectProperty<>(deadline);
 		this.startdate = new SimpleObjectProperty<>(startdate);
 		this.teams = FXCollections.observableArrayList();
@@ -127,5 +127,9 @@ public class ProjectMock implements IProject {
 			this.teams = FXCollections.observableArrayList();
 		}
 		this.teams.addAll(s);
+	}
+	
+	public void printProject(ProjectMock p){
+		System.out.println(p.getId());
 	}
 }
