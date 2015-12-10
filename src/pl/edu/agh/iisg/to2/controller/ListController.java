@@ -126,9 +126,6 @@ public class ListController {
 
             AddController controllerAdd = fxmlLoaderAdd.getController();
 			controllerAdd.setDialogStage(stageAdd);
-			for (ProjectMock tmp: projectTable.getItems()){
-			System.out.println(tmp.getId());
-			}
 			controllerAdd.setData(projectTable.getItems());
 			
             stageAdd.showAndWait();

@@ -65,8 +65,6 @@ public class EditController {
 		String pattern = "yyyy-MM-dd";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 		setConverter(new LocalDateStringConverter(formatter, formatter));
-		deadlineDatePicker = new DatePicker(LocalDate.now());
-		startdateDatePicker = new DatePicker(LocalDate.now());
 
 	}
 
@@ -112,7 +110,13 @@ public class EditController {
 	}
 
 	private boolean isInputValid() {
-		// TODO: implement
+		//LocalDate deadline = projectEdit.getDeadline().getValue();
+		//LocalDate startdate = projectEdit.getStartdate().getValue();
+		//if (deadline == null || startdate == null) return false;
+		//if (startdate.isBefore(deadline)) return false;
+		//if (calculateBudget() != projectEdit.getBudget().getValue().intValueExact());
+		// sprawdzenie budzetu i pracownikow/ zespolow
+		
 		return true;
 	}
 
@@ -120,18 +124,27 @@ public class EditController {
 		
 		projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
 		projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		DecimalFormat decimalFormatter = new DecimalFormat();
+		decimalFormatter.setParseBigDecimal(true);
+		try {
+			SimpleObjectProperty<BigDecimal> bTmp =  new SimpleObjectProperty<BigDecimal>(((BigDecimal) decimalFormatter.parse(budgetTextField.getText())));
+			projectEdit.setBudget(bTmp);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		projectEdit.setTeamsFromString(teamsTextField.getText());
 		projectEdit.setEmployeesFromString(employeesTextField.getText());
-
 
 	}
 
 	private void updateControls() {
-		deadlineDatePicker.setValue(getProjectEdit().getDeadline().getValue());
-		deadlineDatePicker.setValue(getProjectEdit().getStartdate().getValue());
-		employeesTextField.setText(getProjectEdit().getStringEmployees().toString());
-		teamsTextField.setText(getProjectEdit().getStringTeams().toString());
-		budgetTextField.setText(getProjectEdit().getBudget().toString());	
+		deadlineDatePicker = new DatePicker(LocalDate.now());
+		startdateDatePicker = new DatePicker(LocalDate.now());
+		deadlineDatePicker.setValue(projectEdit.getDeadline().getValue());
+		deadlineDatePicker.setValue(projectEdit.getStartdate().getValue());
+//		employeesTextField.setText(projectEdit.getStringEmployees().toString());
+//		teamsTextField.setText(projectEdit.getStringTeams().toString());
+		budgetTextField.setText(projectEdit.getBudget().getValue().toString());	
 	}
 	
 	private int calculateBudget(){
@@ -146,13 +159,6 @@ public class EditController {
 		return 0;
 	}
 	
-	private int equalBudget(int budget){
-		if (calculateBudget() == budget)
-			return 1;
-			else
-				return 0;
-	}
-
 
 	public ProjectMock getProjectEdit() {
 		return projectEdit;

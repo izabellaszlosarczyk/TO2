@@ -41,7 +41,7 @@ public class ProjectController {
 	
 	public void generateMockData() {
 		this.projects = FXCollections.observableArrayList();
-		for(int i = 0; i < 15; i++) {
+		for(int i = 0; i < 10; i++) {
 			ProjectMock p = new ProjectMock("projekt tmp id:"+ i, LocalDate.now(), LocalDate.of(2010, 3, i+5), "" + i + "MockTeam", "Pracownicy", new BigDecimal(i));
 			this.projects.add(p);	
 		}

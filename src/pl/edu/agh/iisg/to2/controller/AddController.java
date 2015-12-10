@@ -62,16 +62,11 @@ public class AddController {
 	private ProjectMock project;
 	private ObservableList<ProjectMock> projectsTmp;
 	private boolean approved;
-
-	private LocalDateStringConverter converter;
 	
 	
 	@FXML
 	public void initialize() {
 		this.project = new ProjectMock();
-		String pattern = "yyyy-MM-dd";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		converter = new LocalDateStringConverter(formatter, formatter);
 		deadlineDatePicker = new DatePicker(LocalDate.now());
 		startdateDatePicker = new DatePicker(LocalDate.now());
 	}
@@ -89,8 +84,7 @@ public class AddController {
 	}
 
 	public void setData(ObservableList<ProjectMock> projects) {
-		this.projectsTmp = FXCollections.observableArrayList();
-		projectsTmp.addAll(projects);
+		this.projectsTmp = projects;
 	}
 
 	public boolean isApproved() {
@@ -105,9 +99,7 @@ public class AddController {
 			error.setTextFill(Color.RED);
 			error.setText("Error: You have blank spaces");
 		} else {
-			ProjectMock project1 = new ProjectMock();
-			project1 = this.project;
-			controller.addProjects(project1);
+			projectsTmp.add(project);
 		}
 		if (isInputValid()) {
 			updateModel();
@@ -145,19 +137,31 @@ public class AddController {
 	}
 
 	private boolean isInputValid() {
+		//LocalDate deadline = project.getDeadline().getValue();
+		//LocalDate startdate = project.getStartdate().getValue();
+		//if (deadline == null || startdate == null) return false;
+		//if (startdate.isBefore(deadline)) return false;
+		//if (calculateBudget() != project.getBudget().getValue().intValueExact());
+		// sprawdzenie budzetu i pracownikow/ zespolow
 		
 		return true;
 	}
 
+	
 	private void updateModel() {
-		String pattern = "yyyy-MM-dd";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 
 		project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
 		project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		DecimalFormat decimalFormatter = new DecimalFormat();
+		decimalFormatter.setParseBigDecimal(true);
+		try {
+			SimpleObjectProperty<BigDecimal> bTmp =  new SimpleObjectProperty<BigDecimal>(((BigDecimal) decimalFormatter.parse(budgetTextField.getText())));
+			project.setBudget(bTmp);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		project.setTeamsFromString(teamsTextField.getText());
 		project.setEmployeesFromString(employeesTextField.getText());
-
 	}
 
 	
@@ -166,7 +170,7 @@ public class AddController {
 		int daysInt = toIntExact(days);
 		int cost = 0;
 		for (IEmployee e: project.getEmployees() ) cost += e.getSalary();
-		for (ITeam t: project.getTeams() ) cost += t.getCostOfTeam().intValueExact() ;
+		for (ITeam t: project.getTeams() ) cost += t.getCostOfTeam().intValueExact();
 		// TODO: implement
 		cost = cost*daysInt*8; 
 		
