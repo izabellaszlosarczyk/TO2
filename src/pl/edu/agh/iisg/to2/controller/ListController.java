@@ -61,8 +61,6 @@ public class ListController {
 	private ObservableList<ProjectMock> projects;
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
-	private FindEmployees finderEmployees;
-	private FindTeams finderTeams;
 	
 	@FXML
 	private void initialize() {
@@ -141,8 +139,6 @@ public class ListController {
 
 	@FXML
 	private void handleEditAction(ActionEvent event) {
-		ProjectMock p = new ProjectMock();
-		p =  projectTable.getSelectionModel().getSelectedItem();
         try {
             FXMLLoader fxmlLoaderEdit = new FXMLLoader();
             fxmlLoaderEdit.setLocation(Main.class.getResource("view/EditView.fxml"));
@@ -154,7 +150,7 @@ public class ListController {
             
             EditController controllerEdit = fxmlLoaderEdit.getController();
             controllerEdit.setDialogStage(stageEdit);
-            controllerEdit.setData(p, employees, teams);
+    		controllerEdit.setData(projectTable.getSelectionModel().getSelectedItem(), this.employees, this.teams);
             
             stageEdit.showAndWait();
             projectTable.refresh(); 
@@ -167,9 +163,10 @@ public class ListController {
 	}
 	
 	public void setData(ObservableList<ProjectMock> p, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
-		projectTable.getItems().setAll(p);
 		this.employees = e;
 		this.teams = t;
+		projectTable.getItems().setAll(p);
+
 	}
 	
 	public ProjectController getProjController() {

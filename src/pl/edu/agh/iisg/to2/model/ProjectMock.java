@@ -106,7 +106,7 @@ public class ProjectMock implements IProject {
 		t = getTeams();
 		if (t != null){
 			for (ITeam tmp: t){
-				s.setValue(s.getValue() + tmp.getNameOfTeam() + ";");
+				s.setValue(s.getValue() + tmp.getNameOfTeam() + " ");
 			}
 		}
 		else s.setValue("0");
@@ -119,7 +119,7 @@ public class ProjectMock implements IProject {
 		e = getEmployees();
 		if (e != null){
 			for (IEmployee tmp: e){
-				s.setValue(s.getValue() + tmp.getId() + ";");
+				s.setValue(s.getValue() + tmp.getId() + " ");
 			}
 		}
 		else s.setValue("0");
@@ -146,5 +146,10 @@ public class ProjectMock implements IProject {
 	
 	public void printProject(ProjectMock p){
 		System.out.println(p.getId());
+	}
+	
+	public String normalString(StringProperty p){
+		String s = p.getValue();
+		return s;
 	}
 }

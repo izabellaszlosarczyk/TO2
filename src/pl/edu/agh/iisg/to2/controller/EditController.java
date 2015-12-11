@@ -69,12 +69,9 @@ public class EditController {
 		String pattern = "yyyy-MM-dd";
 		formatter = DateTimeFormatter.ofPattern(pattern);
 		setConverter(new LocalDateStringConverter(formatter, formatter));
-		deadlineDatePicker = new DatePicker();
-		startdateDatePicker = new DatePicker();
-
 	}
 	
-	public String toString(LocalDate date) {
+	public String toStringDate(LocalDate date) {
         if (date != null) {
             return formatter.format(date);
         } else {
@@ -82,7 +79,7 @@ public class EditController {
         }
     }
 	
-	public LocalDate fromString(String string) {
+	public LocalDate fromStringDate(String string) {
          if (string != null && !string.isEmpty()) {
              return LocalDate.parse(string, formatter);
          } else {
@@ -163,13 +160,13 @@ public class EditController {
 	}
 
 	private void updateControls() {
-		LocalDate tmp = projectEdit.getDeadline().getValue();
-		deadlineDatePicker.setValue(LocalDate.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth()));
 		deadlineDatePicker.setValue(projectEdit.getDeadline().getValue());
-		tmp = projectEdit.getStartdate().getValue();
-		startdateDatePicker.setValue(LocalDate.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth()));
-		employeesTextField.setText(projectEdit.getStringEmployees().toString());
-		teamsTextField.setText(projectEdit.getStringTeams().toString());
+		startdateDatePicker.setValue(projectEdit.getStartdate().getValue());
+		String s1 = projectEdit.getStringTeams().getValue();
+		String s2 = projectEdit.getStringEmployees().getValue();
+		System.out.println(s1 + s2);
+		employeesTextField.setText(s1);
+		teamsTextField.setText(s2);
 		budgetTextField.setText(projectEdit.getBudget().getValue().toString());	
 	}
 	
