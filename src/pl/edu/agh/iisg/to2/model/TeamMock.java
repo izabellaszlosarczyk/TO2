@@ -6,53 +6,60 @@ import java.util.List;
 import java.util.Random;
 
 public class TeamMock implements ITeam {
-	private int id;
+	private String id;
+	private List<IEmployee> employees;
+	private BigDecimal costOfTeam;
+	private String nameOfTeam;
 
-	public TeamMock(int id) {
+	public TeamMock() {
+		this.employees = new ArrayList<>();	
+	}
+	
+	public TeamMock(String id) {
 		this.id = id;
+		this.employees = new ArrayList<>();	
 	}
 
+	public TeamMock(String id, List<IEmployee> employees, BigDecimal costofteam, String nameOfTeam) {
+		this.id = id;
+		this.employees = employees;
+		this.costOfTeam = costofteam;
+		this.nameOfTeam = nameOfTeam;
+	}
+	
 	@Override
 	public BigDecimal getCostOfTeam() {
-		BigDecimal bigDecimal = new BigDecimal(1000);
-		return bigDecimal;
+		return costOfTeam;
 	}
 
 	@Override
 	public List<IEmployee> getFullMemberList() {
-		List<IEmployee> list = new ArrayList();
-		Random generator = new Random();
-		
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Stefan", "Nowak"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Zanklod", "Wamdam"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Bruce", "Lee"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Chuck", "Norris"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Mr", "Bean"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Piotrus", "Pan"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("Dzejms", "Bond"));
-		}
-		if(generator.nextBoolean()) {
-			list.add(new EmployeeMock("SkonczylySieImiona", "Nazwisko"));
-		}
-		return list;
+		return employees;
 	}
 
 	@Override
 	public String getId() {
 		return new Integer(id).toString();
+	}
+
+	public List<IEmployee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(ArrayList<IEmployee> employees) {
+		this.employees = employees;
+	}
+
+	public String getNameOfTeam() {
+		return nameOfTeam;
+	}
+
+	public void setNameOfTeam(String nameOfTeam) {
+		this.nameOfTeam = nameOfTeam;
+	}
+
+	public void setCostOfTeam(BigDecimal costOfTeam) {
+		this.costOfTeam = costOfTeam;
 	}
 
 }

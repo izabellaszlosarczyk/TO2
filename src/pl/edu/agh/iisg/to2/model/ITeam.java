@@ -11,4 +11,6 @@ public interface ITeam {
 	public List<IEmployee> getFullMemberList();
 	
 	public String getId();
+	
+	public String getNameOfTeam();
 }

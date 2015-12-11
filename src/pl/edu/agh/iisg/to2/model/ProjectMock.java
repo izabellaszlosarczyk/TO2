@@ -2,6 +2,7 @@ package pl.edu.agh.iisg.to2.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +14,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pl.edu.agh.iisg.to2.controller.FindEmployees;
+import pl.edu.agh.iisg.to2.controller.FindTeams;
 
 public class ProjectMock implements IProject {
 
@@ -23,19 +26,27 @@ public class ProjectMock implements IProject {
 	private ObservableList<IEmployee> employees;
 	private ObjectProperty<BigDecimal> budget;
 
-	public ProjectMock() {
+	public ProjectMock(){
 		this.id = UUID.randomUUID().toString();
 	}
-	 
-	public ProjectMock(String id,LocalDate deadline, LocalDate startdate, String teams, String employees, BigDecimal budget) {
-		this.id = id;
+	
+	public ProjectMock(LocalDate deadline, LocalDate startdate, ITeam team, IEmployee employee, BigDecimal budget) {
 		this.deadline = new SimpleObjectProperty<>(deadline);
 		this.startdate = new SimpleObjectProperty<>(startdate);
+		this.id = UUID.randomUUID().toString();
 		this.teams = FXCollections.observableArrayList();
+		this.teams.add(team);
 		this.employees = FXCollections.observableArrayList();
-		
-		setTeamsFromString(teams);
-		this.employees = FXCollections.observableArrayList(this.getTeams().get(0).getFullMemberList());
+		this.employees.add(employee);
+		this.budget = new SimpleObjectProperty<BigDecimal>(budget);
+	}
+	 
+	public ProjectMock(LocalDate deadline, LocalDate startdate, List<ITeam> teams, List<IEmployee> employees, BigDecimal budget) {
+		this.id = UUID.randomUUID().toString();
+		this.deadline = new SimpleObjectProperty<>(deadline);
+		this.startdate = new SimpleObjectProperty<>(startdate);
+		this.teams = FXCollections.observableArrayList(teams);
+		this.employees = FXCollections.observableArrayList(employees);
 		this.budget = new SimpleObjectProperty<BigDecimal>(budget);
 	}
 
@@ -80,26 +91,6 @@ public class ProjectMock implements IProject {
 		this.employees = employees;
 	}
 	
-	public StringProperty getStringTeams(){
-		StringProperty s = new SimpleStringProperty("");
-		ObservableList<ITeam> t = FXCollections.observableArrayList();
-		t = getTeams();
-		for (ITeam tmp: t){
-			s.setValue(s.getValue() + tmp.getId() + ";");
-		}
-		return s;
-	}
-	
-	public StringProperty getStringEmployees(){
-		StringProperty s = new SimpleStringProperty("");
-		ObservableList<IEmployee> e = FXCollections.observableArrayList();
-		e = getEmployees();
-		for (IEmployee tmp: e){
-			s.setValue(s.getValue() + tmp.getId() + ";");
-		}
-		return s;
-	}
-
 	public ObjectProperty<BigDecimal> getBudget() {
 		return budget;
 	}
@@ -109,24 +100,48 @@ public class ProjectMock implements IProject {
 	}
 	
 	
-	public void setEmployeesFromString(String s1){
-		ObservableList<IEmployee> s = FXCollections.observableArrayList();
-		if(this.employees == null) {
-			this.employees = FXCollections.observableArrayList();
+	public StringProperty getStringTeams(){
+		StringProperty s = new SimpleStringProperty("");
+		ObservableList<ITeam> t = FXCollections.observableArrayList();
+		t = getTeams();
+		if (t != null){
+			for (ITeam tmp: t){
+				s.setValue(s.getValue() + tmp.getNameOfTeam() + ";");
+			}
 		}
-		this.employees.addAll(s);
+		else s.setValue("0");
+		return s;
+	}
+	
+	public StringProperty getStringEmployees(){
+		StringProperty s = new SimpleStringProperty("");
+		ObservableList<IEmployee> e = FXCollections.observableArrayList();
+		e = getEmployees();
+		if (e != null){
+			for (IEmployee tmp: e){
+				s.setValue(s.getValue() + tmp.getId() + ";");
+			}
+		}
+		else s.setValue("0");
+	
+		return s;
+	}
+	
+	public void setEmployeesFromString(String s1, ObservableList<IEmployee> e){
+		String[] arr = s1.split(" ");
+		employees = FXCollections.observableArrayList();
+		for ( String ss : arr) {
+			employees.add(FindEmployees.findWithID(ss, e));
+		  }
+		
 	}
 
-	public void setTeamsFromString(String text) {
-		int id = 0;
-		if(text != null && text.length() > 0) {
-			id = text.charAt(0);
-		}
-		ITeam s = new TeamMock(id);
-		if(this.teams == null) {
-			this.teams = FXCollections.observableArrayList();
-		}
-		this.teams.addAll(s);
+	public void setTeamsFromString(String s1,  ObservableList<ITeam> t) {
+		String[] arr = s1.split(" ");
+		teams = FXCollections.observableArrayList();
+		for ( String ss : arr) {
+			teams.add(FindTeams.findWithID(ss, t));
+		  }
 	}
 	
 	public void printProject(ProjectMock p){

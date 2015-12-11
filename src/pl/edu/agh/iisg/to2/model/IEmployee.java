@@ -20,9 +20,9 @@ public interface IEmployee {
 
 	void setPosition(String position);
 
-	int getSalary();
+	BigDecimal getSalary();
 
-	void setSalary(int salary);
+	void setSalary(BigDecimal salary);
 
 	String getPhone();
 

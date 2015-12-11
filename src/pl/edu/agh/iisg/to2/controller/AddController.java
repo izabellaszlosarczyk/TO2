@@ -61,6 +61,8 @@ public class AddController {
 	private Stage dialogStage;
 	private ProjectMock project;
 	private ObservableList<ProjectMock> projectsTmp;
+	private ObservableList<ITeam> teams;
+	private ObservableList<IEmployee> employees;
 	private boolean approved;
 	
 	
@@ -83,8 +85,10 @@ public class AddController {
 		this.dialogStage = dialogStage;
 	}
 
-	public void setData(ObservableList<ProjectMock> projects) {
+	public void setData(ObservableList<ProjectMock> projects, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
 		this.projectsTmp = projects;
+		this.teams = t;
+		this.employees = e;
 	}
 
 	public boolean isApproved() {
@@ -149,19 +153,21 @@ public class AddController {
 
 	
 	private void updateModel() {
-
-		project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-		project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-		DecimalFormat decimalFormatter = new DecimalFormat();
-		decimalFormatter.setParseBigDecimal(true);
-		try {
-			SimpleObjectProperty<BigDecimal> bTmp =  new SimpleObjectProperty<BigDecimal>(((BigDecimal) decimalFormatter.parse(budgetTextField.getText())));
-			project.setBudget(bTmp);
-		} catch (ParseException e) {
-			e.printStackTrace();
+		
+		if (deadlineDatePicker.getValue() != null) project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
+		if (startdateDatePicker.getValue() != null) project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		if (budgetTextField.getText() != null){
+			DecimalFormat decimalFormatter = new DecimalFormat();
+			decimalFormatter.setParseBigDecimal(true);
+			try {
+				SimpleObjectProperty<BigDecimal> bTmp =  new SimpleObjectProperty<BigDecimal>(((BigDecimal) decimalFormatter.parse(budgetTextField.getText())));
+				project.setBudget(bTmp);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
-		project.setTeamsFromString(teamsTextField.getText());
-		project.setEmployeesFromString(employeesTextField.getText());
+		if (teamsTextField.getText() != null) project.setTeamsFromString(teamsTextField.getText(), teams);
+		if (employeesTextField.getText() != null) project.setEmployeesFromString(employeesTextField.getText(), employees);
 	}
 
 	
@@ -169,7 +175,7 @@ public class AddController {
 		long days = ChronoUnit.DAYS.between(project.getDeadline().getValue(), project.getStartdate().getValue());
 		int daysInt = toIntExact(days);
 		int cost = 0;
-		for (IEmployee e: project.getEmployees() ) cost += e.getSalary();
+		for (IEmployee e: project.getEmployees() ) cost += e.getSalary().intValueExact();
 		for (ITeam t: project.getTeams() ) cost += t.getCostOfTeam().intValueExact();
 		// TODO: implement
 		cost = cost*daysInt*8; 

@@ -59,7 +59,10 @@ public class ListController {
 	private LocalDateStringConverter converter;
 	private ProjectController projController; 
 	private ObservableList<ProjectMock> projects;
-
+	private ObservableList<ITeam> teams;
+	private ObservableList<IEmployee> employees;
+	private FindEmployees finderEmployees;
+	private FindTeams finderTeams;
 	
 	@FXML
 	private void initialize() {
@@ -126,7 +129,7 @@ public class ListController {
 
             AddController controllerAdd = fxmlLoaderAdd.getController();
 			controllerAdd.setDialogStage(stageAdd);
-			controllerAdd.setData(projectTable.getItems());
+			controllerAdd.setData(projectTable.getItems(), employees, teams);
 			
             stageAdd.showAndWait();
             System.out.println("Refreshing...");
@@ -151,7 +154,7 @@ public class ListController {
             
             EditController controllerEdit = fxmlLoaderEdit.getController();
             controllerEdit.setDialogStage(stageEdit);
-            controllerEdit.setData(p);
+            controllerEdit.setData(p, employees, teams);
             
             stageEdit.showAndWait();
             projectTable.refresh(); 
@@ -163,9 +166,10 @@ public class ListController {
         
 	}
 	
-	public void setData(ObservableList<ProjectMock> p) {
+	public void setData(ObservableList<ProjectMock> p, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
 		projectTable.getItems().setAll(p);
-
+		this.employees = e;
+		this.teams = t;
 	}
 	
 	public ProjectController getProjController() {

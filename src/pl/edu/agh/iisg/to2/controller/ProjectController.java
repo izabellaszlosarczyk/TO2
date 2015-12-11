@@ -3,6 +3,8 @@ package pl.edu.agh.iisg.to2.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import pl.edu.agh.iisg.to2.Main;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
+import pl.edu.agh.iisg.to2.model.DataGenerator;
 
 public class ProjectController {
 
@@ -40,13 +43,18 @@ public class ProjectController {
 	}
 	
 	public void generateMockData() {
+		int numberOfEmployees = 12;
+		int numberOFTeams = 5;
+		List<IEmployee> e = new ArrayList<>(DataGenerator.generateEmployees(numberOfEmployees));
+		List<ITeam> t = new ArrayList<>(DataGenerator.generateTeams(numberOFTeams));
+		this.employees = FXCollections.observableArrayList(e);
+		this.teams = FXCollections.observableArrayList(t);
 		this.projects = FXCollections.observableArrayList();
-		for(int i = 0; i < 10; i++) {
-			ProjectMock p = new ProjectMock("projekt tmp id:"+ i, LocalDate.now(), LocalDate.of(2010, 3, i+5), "" + i + "MockTeam", "Pracownicy", new BigDecimal(i));
-			this.projects.add(p);	
+		int i = 0;
+		for (i = 0; i < 9; i = i + 1){
+			this.projects.add(DataGenerator.generateProject(e, t, numberOfEmployees ,numberOFTeams));
 		}
 	}
-	
 	public void initRootLayout() {
 		try {
 			this.primaryStage.setTitle("Project");
@@ -60,7 +68,7 @@ public class ProjectController {
 			
 			ListController controller = loader.getController();
 			generateMockData();
-			controller.setData(projects);
+			controller.setData(projects, employees, teams);
 			controller.setProjController(this);
 			
 			Scene scene = new Scene(rootLayout);

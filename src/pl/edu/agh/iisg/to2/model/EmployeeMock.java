@@ -5,10 +5,21 @@ import java.math.BigDecimal;
 public class EmployeeMock implements IEmployee {
 	private String firstName;
 	private String lastName;
+	private BigDecimal salary;
+	private String pesel;
+	private String id;
 	
 	public EmployeeMock(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+	
+	public EmployeeMock(String id, String firstName, String lastName, String pesel, BigDecimal salary) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.id = id;
+		this.salary = salary;
+		this.pesel = pesel;
 	}
 	
     /* (non-Javadoc)
@@ -60,15 +71,15 @@ public class EmployeeMock implements IEmployee {
 	 * @see com.agh.to2.mock.IEmployee#getSalary()
 	 */
     @Override
-	public int getSalary() {
-    	return 0;
+	public BigDecimal getSalary() {
+    	return salary;
     }
 
     /* (non-Javadoc)
 	 * @see com.agh.to2.mock.IEmployee#setSalary(int)
 	 */
     @Override
-	public void setSalary(int salary) {
+	public void setSalary(BigDecimal salary) {
     }
 
     /* (non-Javadoc)

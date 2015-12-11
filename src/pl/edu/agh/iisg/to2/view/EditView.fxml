@@ -25,17 +25,17 @@
             <RowConstraints minHeight="10.0" />
 			</rowConstraints>
 			<children>
-				<Label text="Deadline">
+				<Label text="Deadline" GridPane.rowIndex="1">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</Label>
-				<Label text="StartDate" GridPane.rowIndex="1">
+				<Label text="StartDate" GridPane.rowIndex="2">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</Label>
-				<Label text="Budget" GridPane.rowIndex="4">
+				<Label text="Budget" GridPane.rowIndex="3">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
@@ -45,8 +45,8 @@
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</TextField>
-            <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" />
-            <DatePicker fx:id="startdateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <DatePicker fx:id="startdateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 				 <Button fx:id="editEmployeesButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddEmployeesAction" text="Edit Employees" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                  <Button fx:id="editTeamsButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTeamsAction" text="Edit teams" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 

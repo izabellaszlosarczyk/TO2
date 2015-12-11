@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,18 +59,42 @@ public class EditController {
 	private boolean approved;
 
 	private LocalDateStringConverter converter;
+	private DateTimeFormatter formatter;
 	
+	private ObservableList<ITeam> teams;
+	private ObservableList<IEmployee> employees;
 	
 	@FXML
 	public void initialize() {
 		String pattern = "yyyy-MM-dd";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		formatter = DateTimeFormatter.ofPattern(pattern);
 		setConverter(new LocalDateStringConverter(formatter, formatter));
+		deadlineDatePicker = new DatePicker();
+		startdateDatePicker = new DatePicker();
 
 	}
+	
+	public String toString(LocalDate date) {
+        if (date != null) {
+            return formatter.format(date);
+        } else {
+            return "";
+        }
+    }
+	
+	public LocalDate fromString(String string) {
+         if (string != null && !string.isEmpty()) {
+             return LocalDate.parse(string, formatter);
+         } else {
+             return null;
+         }
+     }
 
-	public void setData(ProjectMock project) {
+
+	public void setData(ProjectMock project, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
 		this.projectEdit = project;
+		this.teams = t;
+		this.employees = e;
 		updateControls();
 	}
 
@@ -84,7 +109,6 @@ public class EditController {
 			error.setTextFill(Color.RED);
 			error.setText("Error: You have blank spaces");
 		} else {
-			updateModel();
 			approved = true;
 		}
 		if (isInputValid()) {
@@ -122,28 +146,30 @@ public class EditController {
 
 	private void updateModel() {
 		
-		projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-		projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-		DecimalFormat decimalFormatter = new DecimalFormat();
-		decimalFormatter.setParseBigDecimal(true);
-		try {
-			SimpleObjectProperty<BigDecimal> bTmp =  new SimpleObjectProperty<BigDecimal>(((BigDecimal) decimalFormatter.parse(budgetTextField.getText())));
-			projectEdit.setBudget(bTmp);
-		} catch (ParseException e) {
-			e.printStackTrace();
+		if (deadlineDatePicker.getValue() != null) projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
+		if (startdateDatePicker.getValue() != null) projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		if (budgetTextField.getText() != null){
+			DecimalFormat decimalFormatter = new DecimalFormat();
+			decimalFormatter.setParseBigDecimal(true);
+			try {
+				SimpleObjectProperty<BigDecimal> bTmp =  new SimpleObjectProperty<BigDecimal>(((BigDecimal) decimalFormatter.parse(budgetTextField.getText())));
+				projectEdit.setBudget(bTmp);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
-		projectEdit.setTeamsFromString(teamsTextField.getText());
-		projectEdit.setEmployeesFromString(employeesTextField.getText());
-
+		if (teamsTextField.getText() != null) projectEdit.setTeamsFromString(teamsTextField.getText(), teams);
+		if (employeesTextField.getText() != null) projectEdit.setEmployeesFromString(employeesTextField.getText(), employees);
 	}
 
 	private void updateControls() {
-		deadlineDatePicker = new DatePicker(LocalDate.now());
-		startdateDatePicker = new DatePicker(LocalDate.now());
+		LocalDate tmp = projectEdit.getDeadline().getValue();
+		deadlineDatePicker.setValue(LocalDate.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth()));
 		deadlineDatePicker.setValue(projectEdit.getDeadline().getValue());
-		deadlineDatePicker.setValue(projectEdit.getStartdate().getValue());
-//		employeesTextField.setText(projectEdit.getStringEmployees().toString());
-//		teamsTextField.setText(projectEdit.getStringTeams().toString());
+		tmp = projectEdit.getStartdate().getValue();
+		startdateDatePicker.setValue(LocalDate.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth()));
+		employeesTextField.setText(projectEdit.getStringEmployees().toString());
+		teamsTextField.setText(projectEdit.getStringTeams().toString());
 		budgetTextField.setText(projectEdit.getBudget().getValue().toString());	
 	}
 	
@@ -151,7 +177,7 @@ public class EditController {
 		long days = ChronoUnit.DAYS.between(getProjectEdit().getDeadline().getValue(), getProjectEdit().getStartdate().getValue());
 		int daysInt = toIntExact(days);
 		int cost = 0;
-		for (IEmployee e: getProjectEdit().getEmployees() ) cost += e.getSalary();
+		for (IEmployee e: getProjectEdit().getEmployees() ) cost += e.getSalary().intValueExact();
 		for (ITeam t: getProjectEdit().getTeams() ) cost += t.getCostOfTeam().intValueExact() ;
 		// TODO: implement
 		cost = cost*daysInt*8; 
