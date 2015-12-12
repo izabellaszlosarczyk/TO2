@@ -27,6 +27,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -59,7 +60,6 @@ public class ListController {
 	@FXML private TextField paramEmployees;
 	@FXML private TextField paramTeams;
 	@FXML private TextField paramBudget;
-	
 
 	private LocalDateStringConverter converter;
 	private ProjectController projController; 
@@ -68,17 +68,17 @@ public class ListController {
 	private ObservableList<IEmployee> employees;
 	
 	@FXML private Label errorId;
-	@FXML private Label errorStartDate;
-	@FXML private Label errorDeadline;
+	@FXML private Label errorDate;
 	@FXML private Label errorTeams;
 	@FXML private Label errorEmployees;
 	@FXML private Label errorBudget;
 	
+	private DateTimeFormatter formatter;
+	
+	
 	@FXML
 	private void initialize() {
-		
 		projectTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		
 		budgetColumn.setCellValueFactory(value -> value.getValue().getBudget());
 		deadlineColumn.setCellValueFactory(dataValue -> dataValue.getValue().getDeadline());
 		startDateColumn.setCellValueFactory(dataValue -> dataValue.getValue().getStartdate());
@@ -86,6 +86,11 @@ public class ListController {
 		employeesColumn.setCellValueFactory(value -> value.getValue().getStringEmployees());
 		deleteButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
 		editButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
+		errorId.setVisible(false);
+		errorDate.setVisible(false);
+		errorTeams.setVisible(false);
+		errorEmployees.setVisible(false);
+		errorBudget.setVisible(false);
 	}
 	
 	private void initializeWithArguments() {
@@ -162,14 +167,15 @@ public class ListController {
 		for (ProjectMock tmpp: tmpWithArguments){
 			System.out.println("koncowe:"+ tmpp.getDeadline().getValue().toString()+ tmpp.getDeadline().getValue().toString());
 		}
-		setData(tmpWithArguments, this.employees , this.teams);	
+		if (areParametersValid()){
+			setData(tmpWithArguments, this.employees , this.teams);
+		}	
 	}
 	
 
 	@FXML
 	private void handleDeleteAction(ActionEvent event) {
 		projectTable.getItems().removeAll(projectTable.getSelectionModel().getSelectedItems());
-		//TODO: implement 
 	}
 	
 	@FXML
@@ -240,8 +246,6 @@ public class ListController {
 		} 
 		this.teams = t;
 		projectTable.getItems().setAll(p);
-		
-
 	}
 	
 	public ProjectController getProjController() {
@@ -250,6 +254,30 @@ public class ListController {
 
 	public void setProjController(ProjectController projController) {
 		this.projController = projController;
+	}
+	
+	public LocalDate fromStringDate(String string) {
+		String pattern = "yyyy-MM-dd";
+		formatter = DateTimeFormatter.ofPattern(pattern);
+		setConverter(new LocalDateStringConverter(formatter, formatter));
+        if (string != null && !string.isEmpty()) {
+            return LocalDate.parse(string, formatter);
+        } else {
+            return null;
+        }
+    }
+	
+	private boolean areParametersValid() {
+		//TODO: Implementation
+		return true;
+	}
+
+	public LocalDateStringConverter getConverter() {
+		return converter;
+	}
+
+	public void setConverter(LocalDateStringConverter converter) {
+		this.converter = converter;
 	}
 
 	

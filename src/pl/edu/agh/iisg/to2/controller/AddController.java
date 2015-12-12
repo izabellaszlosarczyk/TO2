@@ -57,8 +57,10 @@ public class AddController {
 	@FXML private Button cancelButton;
 	@FXML private Button okButton;
 	
-	
-	@FXML private Label error;
+	@FXML private Label errorDate;
+	@FXML private Label errorTeams;
+	@FXML private Label errorEmployees;
+	@FXML private Label errorBudget;
 
 	private Stage dialogStage;
 	private ProjectMock project;
@@ -73,6 +75,10 @@ public class AddController {
 		this.project = new ProjectMock();
 		deadlineDatePicker = new DatePicker(LocalDate.now());
 		startdateDatePicker = new DatePicker(LocalDate.now());
+		errorDate.setVisible(false);
+		errorTeams.setVisible(false);
+		errorEmployees.setVisible(false);
+		errorBudget.setVisible(false);
 	}
 	
 	public ProjectController getController() {
@@ -102,8 +108,8 @@ public class AddController {
 	private void handleOkAction(ActionEvent event) {
 		approved = true;
 		if (!isApproved()) {
-			error.setTextFill(Color.RED);
-			error.setText("Error: You have blank spaces");
+			//error.setTextFill(Color.RED);
+			//error.setText("Error: You have blank spaces");
 		} else {
 			projectsTmp.add(project);
 		}
@@ -143,22 +149,37 @@ public class AddController {
 	}
 
 	private boolean isInputValid() {
-		//LocalDate deadline = project.getDeadline().getValue();
-		//LocalDate startdate = project.getStartdate().getValue();
-		//if (deadline == null || startdate == null) return false;
-		//if (startdate.isBefore(deadline)) return false;
-		//if (calculateBudget() != project.getBudget().getValue().intValueExact());
-		// sprawdzenie budzetu i pracownikow/ zespolow
+		/*LocalDate deadline = project.getDeadline().getValue();
+		LocalDate startdate = project.getStartdate().getValue();
+		if (deadline == null || startdate == null) {
+			errorDate.setText("ERROR! Deadline or startdate is empty!");
+			errorDate.setVisible(true);
+			return false;
+			}
+		if (startdate.isBefore(deadline)) {
+			errorDate.setVisible(true);
+			return false;
+		}
+		if (calculateBudget() != project.getBudget().getValue().intValueExact());
 		
+		// sprawdzenie budzetu i pracownikow/ zespolow
+		*/
 		return true;
 	}
 
 	
 	private void updateModel() {
 		
-		if (deadlineDatePicker.getValue() != null) project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-		if (startdateDatePicker.getValue() != null) project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-		if (budgetTextField.getText() != null){
+		if (deadlineDatePicker.getValue() != null){ 
+			project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
+			System.out.println(deadlineDatePicker.getValue().toString());
+		}
+		if (startdateDatePicker.getValue() != null){
+			project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+			System.out.println(startdateDatePicker.getValue().toString());
+		}
+		
+		if (!(budgetTextField.getText().isEmpty())){
 			DecimalFormat decimalFormatter = new DecimalFormat();
 			decimalFormatter.setParseBigDecimal(true);
 			try {
@@ -168,13 +189,13 @@ public class AddController {
 				e.printStackTrace();
 			}
 		}
-		if (teamsTextField.getText() != null){
+		if (!(teamsTextField.getText().isEmpty())){
 			ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
 			ttmp = project.setTeamsFromString(teamsTextField.getText(), teams);
 			
 			project.setTeams(ttmp);
 		}
-		if (employeesTextField.getText() != null){
+		if (!(employeesTextField.getText().isEmpty())){
 			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
 			etmp = project.setEmployeesFromString(employeesTextField.getText(), employees);
 			project.setEmployeesFromString(employeesTextField.getText(), employees);
@@ -189,7 +210,6 @@ public class AddController {
 		int cost = 0;
 		for (IEmployee e: project.getEmployees() ) cost += e.getSalary().intValueExact();
 		for (ITeam t: project.getTeams() ) cost += t.getCostOfTeam().intValueExact();
-		// TODO: implement
 		cost = cost*daysInt*8; 
 		
 		return 0;

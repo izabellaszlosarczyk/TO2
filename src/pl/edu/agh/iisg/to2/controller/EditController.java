@@ -51,8 +51,12 @@ public class EditController {
 	@FXML private Button editTeamsButton;
 	@FXML private Button cancelButton;
 	@FXML private Button okButton;
-	@FXML private Label error;
 	
+	@FXML private Label errorId;
+	@FXML private Label errorDate;
+	@FXML private Label errorTeams;
+	@FXML private Label errorEmployees;
+	@FXML private Label errorBudget;
 
 	private Stage dialogStage;
 	private ProjectMock projectEdit;
@@ -103,8 +107,8 @@ public class EditController {
 	private void handleOkAction(ActionEvent event) {
 		approved = true;
 		if (!isApproved()) {
-			error.setTextFill(Color.RED);
-			error.setText("Error: You have blank spaces");
+			//error.setTextFill(Color.RED);
+			//error.setText("Error: You have blank spaces");
 		} else {
 			approved = true;
 		}

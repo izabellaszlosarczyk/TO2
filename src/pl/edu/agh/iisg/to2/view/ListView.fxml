@@ -34,19 +34,24 @@
             <Button fx:id="cancelButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCancelAction" text="Cancel" />
             <Pane prefHeight="466.0" prefWidth="150.0">
                <children>
-                  <TextField fx:id="paramStartDate" layoutX="-2.0" layoutY="109.0" prefHeight="25.0" prefWidth="154.0" />
-                  <TextField fx:id="paramId" layoutX="-2.0" layoutY="60.0" prefHeight="25.0" prefWidth="154.0" />
-                  <TextField fx:id="paramDeadline" layoutX="1.0" layoutY="160.0" prefHeight="25.0" prefWidth="150.0" />
-                  <Button fx:id="findButton" alignment="TOP_CENTER" layoutX="55.0" layoutY="332.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleFindAction" text="Find" />
-                  <Text layoutX="14.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
-                  <Text layoutX="8.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date" />
-                  <Text layoutX="9.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deadline" />
-                  <TextField fx:id="paramEmployees" layoutX="-1.0" layoutY="209.0" prefHeight="25.0" prefWidth="150.0" />
-                  <TextField fx:id="paramTeams" layoutY="253.0" prefHeight="25.0" prefWidth="152.0" />
-                  <Text layoutX="6.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee" />
-                  <Text layoutX="4.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team" />
-                  <TextField fx:id="paramBudget" layoutX="-1.0" layoutY="301.0" prefHeight="25.0" prefWidth="151.0" />
-                  <Text layoutX="5.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Budget" />
+                  <TextField fx:id="paramId" layoutX="-2.0" layoutY="70.0" prefHeight="25.0" prefWidth="154.0" />
+                  <TextField fx:id="paramStartDate" layoutX="-2.0" layoutY="144.0" prefHeight="25.0" prefWidth="154.0" />
+                  <TextField fx:id="paramDeadline" layoutX="-1.0" layoutY="200.0" prefHeight="25.0" prefWidth="151.0" />
+                  <TextField fx:id="paramEmployees" layoutX="1.0" layoutY="271.0" prefHeight="25.0" prefWidth="150.0" />
+                  <TextField fx:id="paramTeams" layoutX="-1.0" layoutY="327.0" prefHeight="25.0" prefWidth="152.0" />
+                  <TextField fx:id="paramBudget" layoutX="1.0" layoutY="390.0" prefHeight="25.0" prefWidth="151.0" />
+                  <Text layoutX="-1.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
+                  <Text layoutX="-2.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date" />
+                  <Text layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deadline" />
+                  <Text layoutX="-2.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Employee" />
+                  <Text layoutX="3.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team" />
+                  <Text layoutX="4.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Budget" />
+                  <Label fx:id="errorId" layoutX="42.0" layoutY="45.0" text="ERROR! Id bad type!" textFill="RED" />
+                  <Label fx:id="errorDate" layoutX="16.0" layoutY="103.0" prefHeight="24.0" prefWidth="138.0" text="Deadline before start day!" textFill="RED" />
+                  <Label fx:id="errorEmployees" layoutX="17.0" layoutY="237.0" text="It must be id of employee" textFill="RED" />
+                  <Label fx:id="errorTeams" layoutX="37.0" layoutY="296.0" prefHeight="17.0" prefWidth="116.0" text="It must be id of team" textFill="RED" />
+               	  <Label fx:id="errorBudget" layoutX="18.0" layoutY="352.0" text="Only number are allowed" textFill="#ff0101" />
+                  <Button fx:id="findButton" alignment="TOP_CENTER" layoutX="57.0" layoutY="427.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleFindAction" text="Find" />
                </children>
             </Pane>        
          </children>
