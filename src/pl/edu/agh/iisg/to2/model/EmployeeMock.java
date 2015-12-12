@@ -129,7 +129,7 @@ public class EmployeeMock implements IEmployee {
 
 	@Override
 	public String getId() {
-		return firstName + " " + lastName;
+		return id;
 	}
 
 	@Override

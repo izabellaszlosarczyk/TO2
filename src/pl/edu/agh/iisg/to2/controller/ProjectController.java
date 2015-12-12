@@ -1,8 +1,6 @@
 package pl.edu.agh.iisg.to2.controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.edu.agh.iisg.to2.Main;
 import pl.edu.agh.iisg.to2.model.IEmployee;

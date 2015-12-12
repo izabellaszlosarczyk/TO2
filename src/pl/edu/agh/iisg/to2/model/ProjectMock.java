@@ -2,8 +2,6 @@ package pl.edu.agh.iisg.to2.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,14 +97,16 @@ public class ProjectMock implements IProject {
 		this.budget = budget;
 	}
 	
-	
+
+	//-----------------------------------TO CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!1--------------------------------------------	
 	public StringProperty getStringTeams(){
 		StringProperty s = new SimpleStringProperty("");
 		ObservableList<ITeam> t = FXCollections.observableArrayList();
 		t = getTeams();
 		if (t != null){
 			for (ITeam tmp: t){
-				s.setValue(s.getValue() + tmp.getNameOfTeam() + " ");
+				//System.out.println("ustawiam wartosc stringa Team:"+ tmp.getId());
+				s.setValue(s.getValue() + tmp.getId() + " ");
 			}
 		}
 		else s.setValue("0");
@@ -119,6 +119,7 @@ public class ProjectMock implements IProject {
 		e = getEmployees();
 		if (e != null){
 			for (IEmployee tmp: e){
+				//System.out.println("ustawiam wartosc stringa Employee:"+ tmp.getId());
 				s.setValue(s.getValue() + tmp.getId() + " ");
 			}
 		}
@@ -126,22 +127,25 @@ public class ProjectMock implements IProject {
 	
 		return s;
 	}
-	
-	public void setEmployeesFromString(String s1, ObservableList<IEmployee> e){
+//-----------------------------------------------------------------------------------------------------------	
+	public ObservableList<IEmployee> setEmployeesFromString(String s1, ObservableList<IEmployee> e){
+		ObservableList<IEmployee> empl = FXCollections.observableArrayList();
 		String[] arr = s1.split(" ");
-		employees = FXCollections.observableArrayList();
 		for ( String ss : arr) {
-			employees.add(FindEmployees.findWithID(ss, e));
-		  }
-		
+			//System.out.println("tworze na podstawie stringa employee:"+ ss);
+			empl.add(FindEmployees.findWithID(ss, e));
+		}
+		return empl;
 	}
 
-	public void setTeamsFromString(String s1,  ObservableList<ITeam> t) {
+	public ObservableList<ITeam> setTeamsFromString(String s1,  ObservableList<ITeam> t) {
+		ObservableList<ITeam> te = FXCollections.observableArrayList();
 		String[] arr = s1.split(" ");
-		teams = FXCollections.observableArrayList();
 		for ( String ss : arr) {
-			teams.add(FindTeams.findWithID(ss, t));
-		  }
+			//System.out.println("tworze na podstawie stringa team:"+ ss);
+			te.add(FindTeams.findWithID(ss, t));
+		}
+		return te;
 	}
 	
 	public void printProject(ProjectMock p){

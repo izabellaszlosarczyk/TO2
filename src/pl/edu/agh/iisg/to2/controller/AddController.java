@@ -56,6 +56,8 @@ public class AddController {
 	@FXML private Button addTeamsButton;
 	@FXML private Button cancelButton;
 	@FXML private Button okButton;
+	
+	
 	@FXML private Label error;
 
 	private Stage dialogStage;
@@ -166,8 +168,18 @@ public class AddController {
 				e.printStackTrace();
 			}
 		}
-		if (teamsTextField.getText() != null) project.setTeamsFromString(teamsTextField.getText(), teams);
-		if (employeesTextField.getText() != null) project.setEmployeesFromString(employeesTextField.getText(), employees);
+		if (teamsTextField.getText() != null){
+			ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
+			ttmp = project.setTeamsFromString(teamsTextField.getText(), teams);
+			
+			project.setTeams(ttmp);
+		}
+		if (employeesTextField.getText() != null){
+			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
+			etmp = project.setEmployeesFromString(employeesTextField.getText(), employees);
+			project.setEmployeesFromString(employeesTextField.getText(), employees);
+		}
+		 
 	}
 
 	

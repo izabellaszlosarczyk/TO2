@@ -2,6 +2,8 @@ package pl.edu.agh.iisg.to2.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -55,12 +58,21 @@ public class ListController {
 	@FXML private TextField paramStartDate;
 	@FXML private TextField paramEmployees;
 	@FXML private TextField paramTeams;
+	@FXML private TextField paramBudget;
 	
+
 	private LocalDateStringConverter converter;
 	private ProjectController projController; 
 	private ObservableList<ProjectMock> projects;
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
+	
+	@FXML private Label errorId;
+	@FXML private Label errorStartDate;
+	@FXML private Label errorDeadline;
+	@FXML private Label errorTeams;
+	@FXML private Label errorEmployees;
+	@FXML private Label errorBudget;
 	
 	@FXML
 	private void initialize() {
@@ -74,25 +86,83 @@ public class ListController {
 		employeesColumn.setCellValueFactory(value -> value.getValue().getStringEmployees());
 		deleteButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
 		editButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
-		 
 	}
 	
 	private void initializeWithArguments() {
-		String pattern = "yyyy-MM-dd";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		converter = new LocalDateStringConverter(formatter, formatter); 
-		
-		ObjectProperty<LocalDate> deadline = new SimpleObjectProperty<LocalDate>(converter.fromString(paramDeadline.getText()));
-		ObjectProperty<LocalDate> startdate = new SimpleObjectProperty<LocalDate>(converter.fromString(paramStartDate.getText()));
-		String id = new String(paramId.getText());
-		String employees = new String(paramId.getText());
-		String teams = new String(paramId.getText());
-		
-		/*ObservableList<ProjectMock> tmp1 = FXCollections.observableArrayList();
-		tmp1.addAll(controller.getProjects());
-		for (ProjectMock m: tmp1){
-			 TODO : implementation 
-		}*/
+		ObservableList<ProjectMock> tmpWithArguments = FXCollections.observableArrayList();
+		tmpWithArguments.addAll(projects);
+		String tmp = "";
+		if (!paramId.getText().isEmpty()) {
+			tmp = paramId.getText();
+			System.out.print("string id" + tmp);
+			for (int i = 0; i < tmpWithArguments.size(); i++){
+				if (!(tmp.equals(tmpWithArguments.get(i).getId()))){
+					System.out.print("string id2" + tmpWithArguments.get(i).getId()+"\n");
+					tmpWithArguments.remove(i) ;
+					i--;
+				}
+			}
+		}
+		if (!paramDeadline.getText().isEmpty()){
+			tmp = paramDeadline.getText();
+			System.out.print("string deadline" + tmp);
+			for (int i = 0; i < tmpWithArguments.size(); i++){
+				if (!(tmp.equals(tmpWithArguments.get(i).getDeadline().getValue().toString()))){
+					System.out.print("string deadline2" + tmpWithArguments.get(i).getDeadline().getValue().toString()+"\n");
+					tmpWithArguments.remove(i) ;
+					i--;
+				}
+			}
+		}
+		if (!paramStartDate.getText().isEmpty()){
+			tmp = paramStartDate.getText();
+			System.out.print("string startdate" + tmp);
+			for (int i = 0; i < tmpWithArguments.size(); i++){
+				if (!(tmp.equals(tmpWithArguments.get(i).getStartdate().getValue().toString()))){
+					System.out.print("string startdate2" + tmpWithArguments.get(i).getStartdate().getValue().toString()+"\n");
+					tmpWithArguments.remove(i);
+					i--;
+				}
+			}
+		}
+		if (!paramEmployees.getText().isEmpty()){
+			tmp = paramEmployees.getText();
+			System.out.print("string Employees" + tmp);
+			for (int i = 0; i < tmpWithArguments.size(); i++){
+				if (!(tmp.equals(tmpWithArguments.get(i).getStringEmployees().getValue()))){
+					System.out.print("string employees2" + tmpWithArguments.get(i).getStringEmployees().getValue()+"\n");
+					tmpWithArguments.remove(i) ;
+					i--;
+				}
+			}
+		}
+		if (!paramTeams.getText().isEmpty()){
+			tmp = paramTeams.getText();
+			System.out.print("string Teams" + tmp);
+			for (int i = 0; i < tmpWithArguments.size(); i++){
+				if (!(tmp.equals(tmpWithArguments.get(i).getStringTeams().getValue()))){
+					System.out.print("string teams2" + tmpWithArguments.get(i).getStringTeams().getValue()+"\n");
+					tmpWithArguments.remove(i);
+					i--;
+				}
+			}
+		}
+		if (!paramBudget.getText().isEmpty()){
+			tmp = paramBudget.getText();
+			System.out.print("string Budget:" + tmp +"\n");
+			System.out.println("size: "+tmpWithArguments.size());
+			for (int i = 0; i < tmpWithArguments.size(); i++){
+				if (!(tmp.equals(tmpWithArguments.get(i).getBudget().getValue().toString())) ){
+					//System.out.print("string budget2 to remove: " + tmpWithArguments.get(i).getBudget().getValue().toString()+"\n");
+					tmpWithArguments.remove(i);
+					i--;
+				} 
+			}
+		}
+		for (ProjectMock tmpp: tmpWithArguments){
+			System.out.println("koncowe:"+ tmpp.getDeadline().getValue().toString()+ tmpp.getDeadline().getValue().toString());
+		}
+		setData(tmpWithArguments, this.employees , this.teams);	
 	}
 	
 
@@ -164,8 +234,13 @@ public class ListController {
 	
 	public void setData(ObservableList<ProjectMock> p, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
 		this.employees = e;
+		this.projects = p;
+		for (ProjectMock ptmp: p){
+			System.out.println("deadline: "+ ptmp.getDeadline().getValue().toString()+ "startdate: "+ ptmp.getStartdate().getValue().toString() + "\n");
+		} 
 		this.teams = t;
 		projectTable.getItems().setAll(p);
+		
 
 	}
 	

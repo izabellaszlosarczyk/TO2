@@ -39,7 +39,7 @@ public class TeamMock implements ITeam {
 
 	@Override
 	public String getId() {
-		return new Integer(id).toString();
+		return id;
 	}
 
 	public List<IEmployee> getEmployees() {

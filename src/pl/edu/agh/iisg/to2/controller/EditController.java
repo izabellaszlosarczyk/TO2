@@ -155,8 +155,8 @@ public class EditController {
 				e.printStackTrace();
 			}
 		}
-		if (teamsTextField.getText() != null) projectEdit.setTeamsFromString(teamsTextField.getText(), teams);
-		if (employeesTextField.getText() != null) projectEdit.setEmployeesFromString(employeesTextField.getText(), employees);
+		//if (teamsTextField.getText() != null) projectEdit.setTeamsFromString(teamsTextField.getText(), teams);
+		//if (employeesTextField.getText() != null) projectEdit.setEmployeesFromString(employeesTextField.getText(), employees);
 	}
 
 	private void updateControls() {
@@ -164,9 +164,8 @@ public class EditController {
 		startdateDatePicker.setValue(projectEdit.getStartdate().getValue());
 		String s1 = projectEdit.getStringTeams().getValue();
 		String s2 = projectEdit.getStringEmployees().getValue();
-		System.out.println(s1 + s2);
-		employeesTextField.setText(s1);
-		teamsTextField.setText(s2);
+		employeesTextField.setText(s2);
+		teamsTextField.setText(s1);
 		budgetTextField.setText(projectEdit.getBudget().getValue().toString());	
 	}
 	
