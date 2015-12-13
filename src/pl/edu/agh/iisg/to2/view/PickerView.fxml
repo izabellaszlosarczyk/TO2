@@ -26,7 +26,16 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </opaqueInsets>
          <children>
-            <Button fx:id="okButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleOkAction" text="Ok" />     
+			<Button fx:id="closeButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCloseAction" text="Close" />
+            <Button fx:id="addButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddAction" text="Add" />
+            <Pane prefHeight="466.0" prefWidth="150.0">
+               <children>
+				  <Text layoutX="14.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search phase:" />
+                  <TextField fx:id="searchTextField" layoutX="-2.0" layoutY="109.0" prefHeight="25.0" prefWidth="154.0" />
+                  <Button fx:id="findButton" alignment="TOP_CENTER" layoutX="55.0" layoutY="332.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleFindAction" text="Find" />
+               </children>
+            </Pane>  
+         
          </children>
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

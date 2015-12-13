@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pl.edu.agh.iisg.to2.model.EmployeeMock;
 import pl.edu.agh.iisg.to2.model.IEmployee;
@@ -22,7 +23,12 @@ public class PickerController {
 	@FXML private TableColumn<IEmployee, BigDecimal> costColumn;
 	@FXML private TableColumn<IEmployee, String> checkColumn;
 	
-	@FXML private Button okButton;
+	@FXML private Button closeButton;
+	@FXML private Button addButton;
+	@FXML private Button findButton;
+	
+	@FXML private TextField searchTextField;
+	
 	private Stage dialogStage;
 	
 	private ObservableList<IEmployee> allEmployees;
@@ -35,8 +41,18 @@ public class PickerController {
 	}
 	
 	@FXML
-	private void handleOkAction(ActionEvent event) {
+	private void handleAddAction(ActionEvent event) {
 		dialogStage.close();
+	}
+	
+	@FXML
+	private void handleCloseAction(ActionEvent event) {
+		dialogStage.close();
+	}
+	
+	@FXML
+	private void handleFindAction(ActionEvent event) {
+		
 	}
 	
 	/// Public Interface
