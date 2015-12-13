@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -122,12 +123,37 @@ public class EditController {
 
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
+		showPicker();
 		dialogStage.close();
 	}
 	
 	@FXML
 	private void handleAddTeamsAction(ActionEvent event) {
+		showPicker();
 		dialogStage.close();
+	}
+	
+	private void showPicker() {
+        try {
+            FXMLLoader fxmlLoaderAdd = new FXMLLoader();
+            fxmlLoaderAdd.setLocation(Main.class.getResource("view/PickerView.fxml"));
+            Parent root1 = (Parent) fxmlLoaderAdd.load();
+            
+            Stage stageAdd = new Stage();
+            stageAdd.initModality(Modality.APPLICATION_MODAL);
+            stageAdd.setTitle("Employee Picker");
+            stageAdd.setScene(new Scene(root1));  
+
+            PickerController picker = fxmlLoaderAdd.getController();
+            picker.setDialogStage(stageAdd);
+            //pickerController.setData(pickerTable.getItems(), employees, teams);
+			
+            stageAdd.showAndWait();
+            System.out.println("Refreshing...");
+            //projectTable.refresh(); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
 	private boolean isInputValid() {
