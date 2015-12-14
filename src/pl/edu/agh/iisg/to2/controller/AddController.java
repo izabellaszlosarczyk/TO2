@@ -73,8 +73,6 @@ public class AddController {
 	@FXML
 	public void initialize() {
 		this.project = new ProjectMock();
-		deadlineDatePicker = new DatePicker(LocalDate.now());
-		startdateDatePicker = new DatePicker(LocalDate.now());
 		errorDate.setVisible(false);
 		errorTeams.setVisible(false);
 		errorEmployees.setVisible(false);
@@ -98,26 +96,16 @@ public class AddController {
 		this.teams = t;
 		this.employees = e;
 	}
-
-	public boolean isApproved() {
-		
-		return approved;
-	}
 	
 	@FXML
 	private void handleOkAction(ActionEvent event) {
-		approved = true;
-		if (!isApproved()) {
-			//error.setTextFill(Color.RED);
-			//error.setText("Error: You have blank spaces");
-		} else {
+		updateModel();
+		if (isInputValid()){
 			projectsTmp.add(project);
-		}
-		if (isInputValid()) {
-			updateModel();
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();
-			//sprawdz
+		}else{
+			
 		}
 	}
 
@@ -149,21 +137,19 @@ public class AddController {
 	}
 
 	private boolean isInputValid() {
-		/*LocalDate deadline = project.getDeadline().getValue();
-		LocalDate startdate = project.getStartdate().getValue();
-		if (deadline == null || startdate == null) {
+		if (project.getDeadline() == null || project.getDeadline().getValue() == null || project.getStartdate() == null || project.getStartdate().getValue() == null) {
 			errorDate.setText("ERROR! Deadline or startdate is empty!");
 			errorDate.setVisible(true);
 			return false;
-			}
-		if (startdate.isBefore(deadline)) {
+		}
+		if (!(project.getStartdate().getValue()).isBefore(project.getDeadline().getValue())) {
+			//ustaw na czewono
 			errorDate.setVisible(true);
 			return false;
 		}
-		if (calculateBudget() != project.getBudget().getValue().intValueExact());
+		//if (calculateBudget() != project.getBudget().getValue().intValueExact());
 		
 		// sprawdzenie budzetu i pracownikow/ zespolow
-		*/
 		return true;
 	}
 
@@ -172,11 +158,12 @@ public class AddController {
 		
 		if (deadlineDatePicker.getValue() != null){ 
 			project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-			System.out.println(deadlineDatePicker.getValue().toString());
+			System.out.println("data pobrana2:"+ project.getDeadline().getValue().toString() );
+			
 		}
 		if (startdateDatePicker.getValue() != null){
 			project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-			System.out.println(startdateDatePicker.getValue().toString());
+			System.out.println("data pobrana COCOOCCO:"+ project.getStartdate().getValue().toString());
 		}
 		
 		if (!(budgetTextField.getText().isEmpty())){
