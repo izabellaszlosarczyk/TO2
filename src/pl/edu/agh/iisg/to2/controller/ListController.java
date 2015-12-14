@@ -207,7 +207,7 @@ public class ListController {
 			
             stageAdd.showAndWait();
             System.out.println("Refreshing...");
-            projectTable.refresh(); 
+            //projectTable.refresh(); 
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -229,7 +229,7 @@ public class ListController {
     		controllerEdit.setData(projectTable.getSelectionModel().getSelectedItem(), this.employees, this.teams);
             
             stageEdit.showAndWait();
-            projectTable.refresh(); 
+            //projectTable.refresh(); 
             
             System.out.println("Refreshing...");
         } catch (IOException e) {
