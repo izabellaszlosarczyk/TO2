@@ -27,8 +27,6 @@ public interface IProject {
 	public ObjectProperty<BigDecimal> getBudget();
 	public void setBudget(ObjectProperty<BigDecimal> budget);
 	
-	public StringProperty getStringTeams();
-	public StringProperty getStringEmployees();
 	
 	
 }

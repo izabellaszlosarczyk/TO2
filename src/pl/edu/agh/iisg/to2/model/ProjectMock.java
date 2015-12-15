@@ -101,38 +101,6 @@ public class ProjectMock implements IProject {
 	}
 	
 
-	//-----------------------------------TO CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!1--------------------------------------------	
-	public StringProperty getStringTeams(){
-		StringProperty s = new SimpleStringProperty("");
-		ObservableList<ITeam> t = FXCollections.observableArrayList();
-		t = getTeams();
-		if (t != null){
-			for (ITeam tmp: t){
-				//System.out.println("ustawiam wartosc stringa Team:"+ tmp.getId());
-				s.setValue(s.getValue() + tmp.getId() + " ");
-			}
-		}
-		else s.setValue("0");
-		return s;
-	}
-	
-	public StringProperty getStringEmployees(){
-		StringProperty s = new SimpleStringProperty("");
-		ObservableList<IEmployee> e = FXCollections.observableArrayList();
-		e = getEmployees();
-		if (e != null){
-			for (IEmployee tmp: e){
-				//System.out.println("ustawiam wartosc stringa Employee:"+ tmp.getId());
-				s.setValue(s.getValue() + tmp.getId() + " ");
-			}
-		}
-		else s.setValue("0");
-	
-		return s;
-	}
-//-----------------------------------------------------------------------------------------------------------	
-
-	
 	public void printProject(ProjectMock p){
 		System.out.println(p.getId());
 	}
@@ -152,5 +120,29 @@ public class ProjectMock implements IProject {
 		cost = cost*daysInt*8; 
 		
 		return 0;
+	}
+	
+	public StringProperty getStringTeamsForProject(){
+		StringProperty s = new SimpleStringProperty("");
+		if (getTeams() != null){
+			for (ITeam tmp:  getTeams()){
+				//System.out.println("ustawiam wartosc stringa Team:"+ tmp.getId());
+				s.setValue(s.getValue() + tmp.getId() + " ");
+			}
+		}
+		else s.setValue("-1");
+		return s;
+	}
+	
+	public StringProperty getStringEmployeesForProject(){
+		StringProperty s = new SimpleStringProperty("");
+		if (getEmployees() != null){
+			for (IEmployee tmp: getEmployees() ){
+				//System.out.println("ustawiam wartosc stringa Employee:"+ tmp.getId());
+				s.setValue(s.getValue() + tmp.getId() + " ");
+			}
+		}
+		else s.setValue("-1");
+		return s;
 	}
 }

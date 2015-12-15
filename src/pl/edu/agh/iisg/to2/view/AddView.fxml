@@ -65,12 +65,12 @@
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</Label>
-				<TextField fx:id="employeesTextField" prefHeight="25.0" prefWidth="370.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+				<TextField fx:id="teamsTextField" prefHeight="25.0" prefWidth="370.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>
 				</TextField>
-				<TextField fx:id="teamsTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
+				<TextField fx:id="employeesTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
 					<GridPane.margin>
 						<Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
 					</GridPane.margin>

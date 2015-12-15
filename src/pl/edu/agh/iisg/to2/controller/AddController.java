@@ -157,12 +157,12 @@ public class AddController {
 		
 		if (deadlineDatePicker.getValue() != null){ 
 			project.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-			System.out.println("data pobrana2:"+ project.getDeadline().getValue().toString() );
+			//System.out.println("data pobrana2:"+ project.getDeadline().getValue().toString() );
 			
 		}
 		if (startdateDatePicker.getValue() != null){
 			project.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-			System.out.println("data pobrana COCOOCCO:"+ project.getStartdate().getValue().toString());
+			//System.out.println("data pobrana COCOOCCO:"+ project.getStartdate().getValue().toString());
 		}
 		
 		if (!(budgetTextField.getText().isEmpty())){
@@ -176,14 +176,17 @@ public class AddController {
 			}
 		}
 		if (!(teamsTextField.getText().isEmpty())){
+			System.out.println("chce ustawic team:"+ teamsTextField.getText());
 			ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
-			ttmp = FindTeams.setTeamsFromString(project, teamsTextField.getText(), teams);
-			
+			ttmp.addAll(FindTeams.setTeamsFromString(project, teamsTextField.getText(), teams));
+
 			project.setTeams(ttmp);
 		}
 		if (!(employeesTextField.getText().isEmpty())){
+			System.out.println("chce ustawic pracownika:"+ employeesTextField.getText());
 			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
-			etmp = FindEmployees.setEmployeesFromString(project, employeesTextField.getText(), employees);
+			etmp.addAll(FindEmployees.setEmployeesFromString(project, employeesTextField.getText(), employees));
+			project.setEmployees(etmp);
 		}
 		 
 	}

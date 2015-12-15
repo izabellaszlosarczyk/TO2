@@ -82,8 +82,8 @@ public class ListController {
 		budgetColumn.setCellValueFactory(value -> value.getValue().getBudget());
 		deadlineColumn.setCellValueFactory(dataValue -> dataValue.getValue().getDeadline());
 		startDateColumn.setCellValueFactory(dataValue -> dataValue.getValue().getStartdate());
-		teamsColumn.setCellValueFactory(value -> value.getValue().getStringTeams());
-		employeesColumn.setCellValueFactory(value -> value.getValue().getStringEmployees());
+		teamsColumn.setCellValueFactory(value -> value.getValue().getStringTeamsForProject());
+		employeesColumn.setCellValueFactory(value -> value.getValue().getStringEmployeesForProject());
 		deleteButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
 		editButton.disableProperty().bind(Bindings.isEmpty(projectTable.getSelectionModel().getSelectedItems()));
 		errorId.setVisible(false);
@@ -134,8 +134,8 @@ public class ListController {
 			tmp = paramEmployees.getText();
 			System.out.print("string Employees" + tmp);
 			for (int i = 0; i < tmpWithArguments.size(); i++){
-				if (!(tmp.equals(tmpWithArguments.get(i).getStringEmployees().getValue()))){
-					System.out.print("string employees2" + tmpWithArguments.get(i).getStringEmployees().getValue()+"\n");
+				if (!(tmp.equals(FindEmployees.getStringEmployees(tmpWithArguments.get(i)).getValue()))){
+					System.out.print("string employees2" + FindEmployees.getStringEmployees(tmpWithArguments.get(i)).getValue()+"\n");
 					tmpWithArguments.remove(i) ;
 					i--;
 				}
@@ -145,8 +145,8 @@ public class ListController {
 			tmp = paramTeams.getText();
 			System.out.print("string Teams" + tmp);
 			for (int i = 0; i < tmpWithArguments.size(); i++){
-				if (!(tmp.equals(tmpWithArguments.get(i).getStringTeams().getValue()))){
-					System.out.print("string teams2" + tmpWithArguments.get(i).getStringTeams().getValue()+"\n");
+				if (!(tmp.equals(FindTeams.getStringTeams(tmpWithArguments.get(i)).getValue()))){
+					System.out.print("string teams2" + FindTeams.getStringTeams(tmpWithArguments.get(i)).getValue()+"\n");
 					tmpWithArguments.remove(i);
 					i--;
 				}

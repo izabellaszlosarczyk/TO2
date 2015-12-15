@@ -14,6 +14,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -172,10 +173,10 @@ public class EditController {
 	}
 
 	private void updateModel() {
-		
 		if (deadlineDatePicker.getValue() != null) projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
 		if (startdateDatePicker.getValue() != null) projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
-		if (budgetTextField.getText() != null){
+		
+		if (!(budgetTextField.getText().isEmpty())){
 			DecimalFormat decimalFormatter = new DecimalFormat();
 			decimalFormatter.setParseBigDecimal(true);
 			try {
@@ -185,15 +186,24 @@ public class EditController {
 				e.printStackTrace();
 			}
 		}
-		//if (teamsTextField.getText() != null) projectEdit.setTeamsFromString(teamsTextField.getText(), teams);
-		//if (employeesTextField.getText() != null) projectEdit.setEmployeesFromString(employeesTextField.getText(), employees);
+		if (!(teamsTextField.getText().isEmpty())){
+			ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
+			ttmp.addAll(FindTeams.setTeamsFromString(projectEdit, teamsTextField.getText(), teams));
+			projectEdit.setTeams(ttmp);
+			
+		}
+		if (!(employeesTextField.getText().isEmpty())){
+			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
+			etmp.addAll(FindEmployees.setEmployeesFromString(projectEdit, employeesTextField.getText(), employees));
+			projectEdit.setEmployees(etmp);
+		}
 	}
 
 	private void updateControls() {
 		deadlineDatePicker.setValue(projectEdit.getDeadline().getValue());
 		startdateDatePicker.setValue(projectEdit.getStartdate().getValue());
-		String s1 = projectEdit.getStringTeams().getValue();
-		String s2 = projectEdit.getStringEmployees().getValue();
+		String s1 = projectEdit.getStringTeamsForProject().getValue();
+		String s2 = projectEdit.getStringEmployeesForProject().getValue();
 		employeesTextField.setText(s2);
 		teamsTextField.setText(s1);
 		budgetTextField.setText(projectEdit.getBudget().getValue().toString());	

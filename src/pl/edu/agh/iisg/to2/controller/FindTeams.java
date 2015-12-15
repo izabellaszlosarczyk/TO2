@@ -1,8 +1,9 @@
 package pl.edu.agh.iisg.to2.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pl.edu.agh.iisg.to2.model.ITeam;
@@ -10,44 +11,62 @@ import pl.edu.agh.iisg.to2.model.ProjectMock;
 
 public class FindTeams {
 
+
 	
-	public static ITeam findWithID(ProjectMock p, String id, ObservableList<ITeam> teams){
-		for (ITeam t: teams){
-			if (t.getId() == id){
-				return t;
+	public static List<ITeam> findTeamsWithName(ProjectMock p, String name, ObservableList<ITeam> t){
+
+		ObservableList<ITeam> tmpWithName = FXCollections.observableArrayList();
+		tmpWithName.addAll(t);
+		String[] arr = name.split(" ");
+		for ( String ss : arr) {
+			for (int i = 0; i < tmpWithName.size(); i++){
+				if (!(ss.equals(tmpWithName.get(i).getNameOfTeam()))){
+					tmpWithName.remove(i) ;
+					i--;
+				}
 			}
+			//System.out.println("tworze na podstawie stringa team:"+ ss);
 		}
-		return null;
-	}
-	
-	public static List<ITeam> findTeamsWithID(ProjectMock p, String id, ObservableList<ITeam> teams){
-		List<ITeam> tmp = new ArrayList<>();	
-		for (ITeam t: teams){
-			if (t.getId() == id){
-				tmp.add(t);
-			}
-		}
-		return tmp;
-	}
-	
-	public static List<ITeam> findTeamsWithName(ProjectMock p, String name, ObservableList<ITeam> teams){
-		List<ITeam> tmp = new ArrayList<>();	
-		for (ITeam t: teams){
-			if (t.getNameOfTeam() == name){
-				tmp.add(t);
-			}
-		}
-		return tmp;
+		return tmpWithName;
 	}
 	
 	public static ObservableList<ITeam> setTeamsFromString(ProjectMock p, String s1,  ObservableList<ITeam> t) {
-		ObservableList<ITeam> te = FXCollections.observableArrayList();
-		String[] arr = s1.split(" ");
-		for ( String ss : arr) {
-			//System.out.println("tworze na podstawie stringa team:"+ ss);
-			te.add(FindTeams.findWithID(p, ss, t));
+		System.out.println("string: "+ s1);
+		ObservableList<ITeam> tmpWithID = FXCollections.observableArrayList();
+		tmpWithID.addAll(t);
+		for (int i = 0; i < tmpWithID.size(); i++){
+			if (!(s1.toLowerCase().contains(tmpWithID.get(i).getId().toLowerCase()))){
+				tmpWithID.remove(i) ;
+				i--;
+			}
 		}
-		return te;
+		return tmpWithID;
+	}
+	
+	public static StringProperty getStringTeams(ProjectMock p ){
+		StringProperty s = new SimpleStringProperty("");
+		ObservableList<ITeam> t = FXCollections.observableArrayList();
+		t.addAll(p.getTeams());
+		if (t != null){
+			for (ITeam tmp: t){
+				//System.out.println("ustawiam wartosc stringa Team:"+ tmp.getId());
+				s.setValue(s.getValue()+ tmp.getId()+ " ");
+			}
+		}
+		else s.setValue("0");
+		return s;
+	}
+	
+	public static StringProperty getStringTeams(ObservableList<ITeam> tmpp){
+		StringProperty s = new SimpleStringProperty("");
+		if (tmpp != null){
+			for (ITeam tmp: tmpp){
+				//System.out.println("ustawiam wartosc stringa Team:"+ tmp.getId());
+				s.setValue(s.getValue() + tmp.getId()+ " ");
+			}
+		}
+		else s.setValue("0");
+		return s;
 	}
 
 }
