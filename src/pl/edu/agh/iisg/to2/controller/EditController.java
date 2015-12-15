@@ -198,19 +198,7 @@ public class EditController {
 		teamsTextField.setText(s1);
 		budgetTextField.setText(projectEdit.getBudget().getValue().toString());	
 	}
-	
-	private int calculateBudget(){
-		long days = ChronoUnit.DAYS.between(getProjectEdit().getDeadline().getValue(), getProjectEdit().getStartdate().getValue());
-		int daysInt = toIntExact(days);
-		int cost = 0;
-		for (IEmployee e: getProjectEdit().getEmployees() ) cost += e.getSalary().intValueExact();
-		for (ITeam t: getProjectEdit().getTeams() ) cost += t.getCostOfTeam().intValueExact() ;
-		// TODO: implement
-		cost = cost*daysInt*8; 
-		
-		return 0;
-	}
-	
+
 
 	public ProjectMock getProjectEdit() {
 		return projectEdit;

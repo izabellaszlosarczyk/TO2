@@ -1,7 +1,10 @@
 package pl.edu.agh.iisg.to2.model;
 
+import static java.lang.Math.toIntExact;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -128,25 +131,7 @@ public class ProjectMock implements IProject {
 		return s;
 	}
 //-----------------------------------------------------------------------------------------------------------	
-	public ObservableList<IEmployee> setEmployeesFromString(String s1, ObservableList<IEmployee> e){
-		ObservableList<IEmployee> empl = FXCollections.observableArrayList();
-		String[] arr = s1.split(" ");
-		for ( String ss : arr) {
-			//System.out.println("tworze na podstawie stringa employee:"+ ss);
-			empl.add(FindEmployees.findWithID(ss, e));
-		}
-		return empl;
-	}
 
-	public ObservableList<ITeam> setTeamsFromString(String s1,  ObservableList<ITeam> t) {
-		ObservableList<ITeam> te = FXCollections.observableArrayList();
-		String[] arr = s1.split(" ");
-		for ( String ss : arr) {
-			//System.out.println("tworze na podstawie stringa team:"+ ss);
-			te.add(FindTeams.findWithID(ss, t));
-		}
-		return te;
-	}
 	
 	public void printProject(ProjectMock p){
 		System.out.println(p.getId());
@@ -155,5 +140,17 @@ public class ProjectMock implements IProject {
 	public String normalString(StringProperty p){
 		String s = p.getValue();
 		return s;
+	}
+	
+	//dopisac czesc odpowiedzialna za pracownikow
+	public int calculateBudget(){
+		long days = ChronoUnit.DAYS.between(getDeadline().getValue(), getStartdate().getValue());
+		int daysInt = toIntExact(days);
+		int cost = 0;
+		for (IEmployee e: getEmployees() ) cost += e.getSalary().intValueExact();
+		for (ITeam t: getTeams() ) cost += t.getCostOfTeam().intValueExact();
+		cost = cost*daysInt*8; 
+		
+		return 0;
 	}
 }

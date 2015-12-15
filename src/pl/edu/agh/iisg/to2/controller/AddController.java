@@ -56,6 +56,7 @@ public class AddController {
 	@FXML private Button addTeamsButton;
 	@FXML private Button cancelButton;
 	@FXML private Button okButton;
+	@FXML private Button calculateBudget;
 	
 	@FXML private Label errorDate;
 	@FXML private Label errorTeams;
@@ -108,6 +109,12 @@ public class AddController {
 			
 		}
 	}
+	
+	@FXML
+	private void handleCalculateAction(ActionEvent event) {
+		int budget = project.calculateBudget();
+		budgetTextField.setText(Integer.toString(budget));	
+	}
 
 	@FXML
 	private void handleCancelAction(ActionEvent event) {
@@ -120,15 +127,7 @@ public class AddController {
 		dialogStage.close();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("AddEmployee.fxml"));
-        /*AnchorPane page = (AnchorPane) loader.load();
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("Add Employee");
-        Scene scene = new Scene(page);
-        dialogStage.setScene(scene);
-        //controller.setStage(dialogStage);
-        //nameController.setPerson(person);
-        dialogStage.show();
-		 okno dla dodawania pracownikow*/
+        // dokonczyc
 	}
 	
 	@FXML
@@ -178,32 +177,19 @@ public class AddController {
 		}
 		if (!(teamsTextField.getText().isEmpty())){
 			ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
-			ttmp = project.setTeamsFromString(teamsTextField.getText(), teams);
+			ttmp = FindTeams.setTeamsFromString(project, teamsTextField.getText(), teams);
 			
 			project.setTeams(ttmp);
 		}
 		if (!(employeesTextField.getText().isEmpty())){
 			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
-			etmp = project.setEmployeesFromString(employeesTextField.getText(), employees);
-			project.setEmployeesFromString(employeesTextField.getText(), employees);
+			etmp = FindEmployees.setEmployeesFromString(project, employeesTextField.getText(), employees);
 		}
 		 
 	}
-
-	
-	private int calculateBudget(){
-		long days = ChronoUnit.DAYS.between(project.getDeadline().getValue(), project.getStartdate().getValue());
-		int daysInt = toIntExact(days);
-		int cost = 0;
-		for (IEmployee e: project.getEmployees() ) cost += e.getSalary().intValueExact();
-		for (ITeam t: project.getTeams() ) cost += t.getCostOfTeam().intValueExact();
-		cost = cost*daysInt*8; 
-		
-		return 0;
-	}
 	
 	private int equalBudget(int budget){
-		if (calculateBudget() == budget)
+		if (project.calculateBudget() == budget)
 			return 1;
 			else
 				return 0;
