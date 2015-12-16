@@ -10,7 +10,7 @@ import pl.edu.agh.iisg.to2.model.ProjectMock;
 public class FindEmployees {
 
 
-	public static ObservableList<IEmployee> findWithNameAndSureName(ProjectMock p, String name, String surname, ObservableList<IEmployee> e){
+	public static ObservableList<IEmployee> findWithNameAndSureName(String name, String surname, ObservableList<IEmployee> e){
 		ObservableList<IEmployee> empl = FXCollections.observableArrayList();
 		empl.addAll(e);
 		for (int i = 0; i < empl.size(); i++){
@@ -24,7 +24,7 @@ public class FindEmployees {
 		return empl;
 	}
 	
-	public static ObservableList<IEmployee> setEmployeesFromString(ProjectMock p, String s1, ObservableList<IEmployee> e){
+	public static ObservableList<IEmployee> setEmployeesFromString(String s1, ObservableList<IEmployee> e){
 		ObservableList<IEmployee> empl = FXCollections.observableArrayList();
 		empl.addAll(e);
 		for (int i = 0; i < empl.size(); i++){

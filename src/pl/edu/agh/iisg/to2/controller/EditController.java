@@ -215,13 +215,13 @@ public class EditController {
 		}
 		if (!(teamsTextField.getText().isEmpty())){
 			ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
-			ttmp.addAll(FindTeams.setTeamsFromString(projectEdit, teamsTextField.getText(), teams));
+			ttmp.addAll(FindTeams.setTeamsFromString(teamsTextField.getText(), teams));
 			projectEdit.setTeams(ttmp);
 			
 		}
 		if (!(employeesTextField.getText().isEmpty())){
 			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
-			etmp.addAll(FindEmployees.setEmployeesFromString(projectEdit, employeesTextField.getText(), employees));
+			etmp.addAll(FindEmployees.setEmployeesFromString(employeesTextField.getText(), employees));
 			projectEdit.setEmployees(etmp);
 		}
 	}

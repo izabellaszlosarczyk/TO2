@@ -13,7 +13,7 @@ public class FindTeams {
 
 
 	
-	public static List<ITeam> findTeamsWithName(ProjectMock p, String name, ObservableList<ITeam> t){
+	public static List<ITeam> findTeamsWithName(String name, ObservableList<ITeam> t){
 
 		ObservableList<ITeam> tmpWithName = FXCollections.observableArrayList();
 		tmpWithName.addAll(t);
@@ -30,7 +30,7 @@ public class FindTeams {
 		return tmpWithName;
 	}
 	
-	public static ObservableList<ITeam> setTeamsFromString(ProjectMock p, String s1,  ObservableList<ITeam> t) {
+	public static ObservableList<ITeam> setTeamsFromString(String s1,  ObservableList<ITeam> t) {
 		System.out.println("string: "+ s1);
 		ObservableList<ITeam> tmpWithID = FXCollections.observableArrayList();
 		tmpWithID.addAll(t);
