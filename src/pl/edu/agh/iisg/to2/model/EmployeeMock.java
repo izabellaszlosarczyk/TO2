@@ -2,6 +2,11 @@ package pl.edu.agh.iisg.to2.model;
 
 import java.math.BigDecimal;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class EmployeeMock implements IEmployee {
 	private String firstName;
 	private String lastName;
@@ -134,7 +139,25 @@ public class EmployeeMock implements IEmployee {
 
 	@Override
 	public void setId(BigDecimal id) {
-		// TODO Auto-generated method stub
+		this.id = Integer.toString(id.intValueExact()) ;
 		
+	}
+
+	@Override
+	public StringProperty getLastNameObservable() {
+		StringProperty p = new SimpleStringProperty(getLastName());
+		return p;
+	}
+
+	@Override
+	public StringProperty getFirstNameObservable() {
+		StringProperty p = new SimpleStringProperty(getFirstName());
+		return p;
+	}
+
+	@Override
+	public ObjectProperty<BigDecimal> getSalaryObservable() {
+		ObjectProperty<BigDecimal> salary = new SimpleObjectProperty<BigDecimal>(this.getSalary());
+		return salary;
 	}
 }

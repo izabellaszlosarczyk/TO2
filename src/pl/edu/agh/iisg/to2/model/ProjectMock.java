@@ -15,8 +15,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import pl.edu.agh.iisg.to2.controller.FindEmployees;
-import pl.edu.agh.iisg.to2.controller.FindTeams;
 
 public class ProjectMock implements IProject {
 

@@ -2,6 +2,9 @@ package pl.edu.agh.iisg.to2.model;
 
 import java.math.BigDecimal;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
+
 public interface IEmployee {
 	
 	String getId();
@@ -11,6 +14,10 @@ public interface IEmployee {
 	String getFirstName();
 
 	void setFirstName(String firstName);
+	
+	StringProperty getLastNameObservable();
+	
+	StringProperty getFirstNameObservable();
 
 	String getLastName();
 
@@ -21,6 +28,8 @@ public interface IEmployee {
 	void setPosition(String position);
 
 	BigDecimal getSalary();
+	
+	ObjectProperty<BigDecimal> getSalaryObservable();
 
 	void setSalary(BigDecimal salary);
 

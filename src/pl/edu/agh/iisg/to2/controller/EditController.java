@@ -128,38 +128,16 @@ public class EditController {
 
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
-		showPicker();
+		//showPicker();
 		dialogStage.close();
 	}
 	
 	@FXML
 	private void handleAddTeamsAction(ActionEvent event) {
-		showPicker();
+		//showPicker();
 		dialogStage.close();
 	}
 	
-	private void showPicker() {
-        try {
-            FXMLLoader fxmlLoaderAdd = new FXMLLoader();
-            fxmlLoaderAdd.setLocation(Main.class.getResource("view/PickerView.fxml"));
-            Parent root1 = (Parent) fxmlLoaderAdd.load();
-            
-            Stage stageAdd = new Stage();
-            stageAdd.initModality(Modality.APPLICATION_MODAL);
-            stageAdd.setTitle("Employee Picker");
-            stageAdd.setScene(new Scene(root1));  
-
-            PickerController picker = fxmlLoaderAdd.getController();
-            picker.setDialogStage(stageAdd);
-            //pickerController.setData(pickerTable.getItems(), employees, teams);
-			
-            stageAdd.showAndWait();
-            System.out.println("Refreshing...");
-            //projectTable.refresh(); 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
 
 	private boolean isInputValid() {
 		if (projectEdit.getDeadline() == null || projectEdit.getDeadline().getValue() == null || projectEdit.getStartdate() == null || projectEdit.getStartdate().getValue() == null) {

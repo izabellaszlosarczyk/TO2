@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pl.edu.agh.iisg.to2.model.ITeam;
-import pl.edu.agh.iisg.to2.model.ProjectMock;
 
 public class FindTeams {
 
@@ -41,20 +40,6 @@ public class FindTeams {
 			}
 		}
 		return tmpWithID;
-	}
-	
-	public static StringProperty getStringTeams(ProjectMock p ){
-		StringProperty s = new SimpleStringProperty("");
-		ObservableList<ITeam> t = FXCollections.observableArrayList();
-		t.addAll(p.getTeams());
-		if (t != null){
-			for (ITeam tmp: t){
-				//System.out.println("ustawiam wartosc stringa Team:"+ tmp.getId());
-				s.setValue(s.getValue()+ tmp.getId()+ " ");
-			}
-		}
-		else s.setValue("0");
-		return s;
 	}
 	
 	public static StringProperty getStringTeams(ObservableList<ITeam> tmpp){

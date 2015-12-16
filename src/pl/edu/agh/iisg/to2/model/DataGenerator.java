@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javafx.collections.ObservableList;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.EmployeeMock;
 
@@ -280,7 +279,6 @@ public class DataGenerator {
 	}
 	
 	public static ProjectMock generateProjectWithMultipleTeamsEmployees(List<IEmployee> employees, List<ITeam> teams, int numberOfEmployees, int numberOfTeams){
-		Random generator = new Random(); 
 		long minDay = LocalDate.of(1970, 1, 1).toEpochDay();
 		long maxDay = LocalDate.of(2015, 12, 31).toEpochDay();
 		long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);

@@ -5,7 +5,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import pl.edu.agh.iisg.to2.model.IEmployee;
-import pl.edu.agh.iisg.to2.model.ProjectMock;
 
 public class FindEmployees {
 
@@ -39,20 +38,6 @@ public class FindEmployees {
 		return empl;
 	}
 	
-	public static StringProperty getStringEmployees( ProjectMock p ){
-		StringProperty s = new SimpleStringProperty("");
-		ObservableList<IEmployee> e = FXCollections.observableArrayList();
-		e.addAll(p.getEmployees());
-		if (e != null){
-			for (IEmployee tmp: e){
-				//System.out.println("ustawiam wartosc stringa Employee:"+ tmp.getId());
-				s.setValue(s.getValue()+ " " + tmp.getId());
-			}
-		}
-		else s.setValue("0");
-	
-		return s;
-	}
 	
 	public static StringProperty getStringEmployees(ObservableList<IEmployee> etmp){
 		StringProperty s = new SimpleStringProperty("");

@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class TeamMock implements ITeam {
 	private String id;
 	private List<IEmployee> employees;
@@ -60,6 +65,18 @@ public class TeamMock implements ITeam {
 
 	public void setCostOfTeam(BigDecimal costOfTeam) {
 		this.costOfTeam = costOfTeam;
+	}
+
+	@Override
+	public ObjectProperty<BigDecimal> getCostOfTeamObservable() {
+		ObjectProperty<BigDecimal> salary = new SimpleObjectProperty<BigDecimal>(this.getCostOfTeam());
+		return salary;
+	}
+
+	@Override
+	public StringProperty getNameofTeamObservable() {
+		StringProperty p = new SimpleStringProperty(this.getNameOfTeam());
+		return p;
 	}
 
 }
