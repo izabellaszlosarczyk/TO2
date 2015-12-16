@@ -68,7 +68,6 @@ public class AddController {
 	private ObservableList<ProjectMock> projectsTmp;
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
-	private boolean approved;
 	
 	
 	@FXML
@@ -112,8 +111,20 @@ public class AddController {
 	
 	@FXML
 	private void handleCalculateAction(ActionEvent event) {
-		int budget = project.calculateBudget();
-		budgetTextField.setText(Integer.toString(budget));	
+		BigDecimal budget = new BigDecimal(0);
+		ObjectProperty<LocalDate> deadline =  new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue());
+		ObjectProperty<LocalDate> startdate =  new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue());
+		long days = ChronoUnit.DAYS.between(deadline.getValue(), startdate.getValue());
+		int daysInt = toIntExact(days);
+		ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
+		ttmp.addAll(FindTeams.setTeamsFromString(project, teamsTextField.getText(), teams));
+		ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
+		etmp.addAll(FindEmployees.setEmployeesFromString(project, employeesTextField.getText(), employees));
+		for (IEmployee e: etmp ) budget = budget.add(e.getSalary());
+		for (ITeam t: ttmp) budget = budget.add(t.getCostOfTeam());
+		budget = budget.multiply(new BigDecimal(daysInt*8)); 
+		int tmp = budget.intValueExact();
+		budgetTextField.setText(Integer.toString(tmp));	
 	}
 
 	@FXML
@@ -124,9 +135,9 @@ public class AddController {
 
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
-		dialogStage.close();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("AddEmployee.fxml"));
+		//dialogStage.close();
+        //FXMLLoader loader = new FXMLLoader();
+        //loader.setLocation(Main.class.getResource("AddEmployee.fxml"));
         // dokonczyc
 	}
 	
@@ -142,13 +153,37 @@ public class AddController {
 			return false;
 		}
 		if (!(project.getStartdate().getValue()).isBefore(project.getDeadline().getValue())) {
-			//ustaw na czewono
+
 			errorDate.setVisible(true);
 			return false;
 		}
-		//if (calculateBudget() != project.getBudget().getValue().intValueExact());
-		
-		// sprawdzenie budzetu i pracownikow/ zespolow
+		DecimalFormat decimalFormatter = new DecimalFormat();
+		decimalFormatter.setParseBigDecimal(true);
+		if (project.getBudget() != null){
+				if (project.calculateBudget() > project.getBudget().getValue().intValueExact() ){
+					errorBudget.setTextFill(Color.RED);
+					errorBudget.setText("ERROR! Not enough money for project!");
+					errorBudget.setVisible(true);
+					return false;
+				}		
+		}else{
+			budgetTextField.setStyle("-fx-background-color: red");
+			errorBudget.setText("ERROR! Budget musn't be empty!");
+			errorBudget.setVisible(true);
+			return false;
+		}
+		if (project.getEmployees() == null){
+			employeesTextField.setStyle("-fx-background-color: red");
+			errorEmployees.setText("ERROR! You have to choose employees!");
+			errorEmployees.setVisible(true);
+			return false;
+		}
+		if (project.getTeams() == null ){
+			teamsTextField.setStyle("-fx-background-color: red");
+			errorTeams.setText("ERROR! You have to choose teams!");
+			errorTeams.setVisible(true);
+			return false;
+		}
 		return true;
 	}
 
@@ -189,13 +224,6 @@ public class AddController {
 			project.setEmployees(etmp);
 		}
 		 
-	}
-	
-	private int equalBudget(int budget){
-		if (project.calculateBudget() == budget)
-			return 1;
-			else
-				return 0;
 	}
 	
 	public static void initAddEmployeesDialog() {

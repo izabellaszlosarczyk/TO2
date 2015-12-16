@@ -65,7 +65,7 @@ public class ProjectController {
 			
 			ListController controller = loader.getController();
 			generateMockData();
-			controller.setData(projects, employees, teams);
+			controller.setData(projects, employees, teams, 0);
 			controller.setProjController(this);
 			
 			Scene scene = new Scene(rootLayout);

@@ -119,7 +119,7 @@ public class ProjectMock implements IProject {
 		for (ITeam t: getTeams() ) cost += t.getCostOfTeam().intValueExact();
 		cost = cost*daysInt*8; 
 		
-		return 0;
+		return cost;
 	}
 	
 	public StringProperty getStringTeamsForProject(){

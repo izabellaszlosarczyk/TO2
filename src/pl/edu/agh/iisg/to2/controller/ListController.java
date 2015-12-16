@@ -2,20 +2,13 @@ package pl.edu.agh.iisg.to2.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,12 +19,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.converter.LocalDateStringConverter;
 import pl.edu.agh.iisg.to2.Main;
 import pl.edu.agh.iisg.to2.model.IEmployee;
@@ -53,6 +42,7 @@ public class ListController {
 	@FXML private Button editButton;
 	@FXML private Button findButton;
 	@FXML private Button addButton;
+	@FXML private Button allProjects;
 	
 	@FXML private TextField paramId;
 	@FXML private TextField paramDeadline;
@@ -66,6 +56,7 @@ public class ListController {
 	private ObservableList<ProjectMock> projects;
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
+	private ObservableList<ProjectMock> projectsTmp;
 	
 	@FXML private Label errorId;
 	@FXML private Label errorDate;
@@ -132,10 +123,13 @@ public class ListController {
 		}
 		if (!paramEmployees.getText().isEmpty()){
 			tmp = paramEmployees.getText();
-			System.out.print("string Employees" + tmp);
+			System.out.println("string Employees" + tmp);
 			for (int i = 0; i < tmpWithArguments.size(); i++){
-				if (!(tmp.equals(FindEmployees.getStringEmployees(tmpWithArguments.get(i)).getValue()))){
-					System.out.print("string employees2" + FindEmployees.getStringEmployees(tmpWithArguments.get(i)).getValue()+"\n");
+				ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
+				etmp.addAll(tmpWithArguments.get(i).getEmployees());
+				String tmpEmployees = FindEmployees.getStringEmployees(etmp).getValue();
+				if (!(tmpEmployees.toLowerCase().contains(tmp.toLowerCase()))){
+					System.out.println("wartosc tmp: " + tmp+ " wartosc tmpEmployees: "+ tmpEmployees);
 					tmpWithArguments.remove(i) ;
 					i--;
 				}
@@ -145,9 +139,12 @@ public class ListController {
 			tmp = paramTeams.getText();
 			System.out.print("string Teams" + tmp);
 			for (int i = 0; i < tmpWithArguments.size(); i++){
-				if (!(tmp.equals(FindTeams.getStringTeams(tmpWithArguments.get(i)).getValue()))){
-					System.out.print("string teams2" + FindTeams.getStringTeams(tmpWithArguments.get(i)).getValue()+"\n");
-					tmpWithArguments.remove(i);
+				ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
+				ttmp.addAll(tmpWithArguments.get(i).getTeams());
+				String tmpTeams = FindTeams.getStringTeams(ttmp).getValue();
+				if (!(tmpTeams.toLowerCase().contains(tmp.toLowerCase()))){
+					System.out.println("wartosc tmp: " + tmp+ " wartosc tmpEmployees: "+ tmpTeams);
+					tmpWithArguments.remove(i) ;
 					i--;
 				}
 			}
@@ -168,8 +165,13 @@ public class ListController {
 			System.out.println("koncowe:"+ tmpp.getDeadline().getValue().toString()+ tmpp.getDeadline().getValue().toString());
 		}
 		if (areParametersValid()){
-			setData(tmpWithArguments, this.employees , this.teams);
+			setData(tmpWithArguments, this.employees , this.teams, 1);
 		}	
+	}
+	
+	@FXML
+	private void handleAllProjectsAction(ActionEvent event) {
+		setData(this.projectsTmp, this.employees , this.teams, 1);
 	}
 	
 
@@ -238,8 +240,11 @@ public class ListController {
         
 	}
 	
-	public void setData(ObservableList<ProjectMock> p, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
+	public void setData(ObservableList<ProjectMock> p, ObservableList<IEmployee> e, ObservableList<ITeam> t, int i) {
 		this.employees = e;
+		if (i == 0){
+			this.projectsTmp = p;
+		}
 		this.projects = p;
 		for (ProjectMock ptmp: p){
 			System.out.println("deadline: "+ ptmp.getDeadline().getValue().toString()+ "startdate: "+ ptmp.getStartdate().getValue().toString() + "\n");

@@ -162,13 +162,40 @@ public class EditController {
 	}
 
 	private boolean isInputValid() {
-		//LocalDate deadline = projectEdit.getDeadline().getValue();
-		//LocalDate startdate = projectEdit.getStartdate().getValue();
-		//if (deadline == null || startdate == null) return false;
-		//if (startdate.isBefore(deadline)) return false;
-		//if (calculateBudget() != projectEdit.getBudget().getValue().intValueExact());
-		// sprawdzenie budzetu i pracownikow/ zespolow
-		
+		if (projectEdit.getDeadline() == null || projectEdit.getDeadline().getValue() == null || projectEdit.getStartdate() == null || projectEdit.getStartdate().getValue() == null) {
+			errorDate.setText("ERROR! Deadline or startdate is empty!");
+			errorDate.setVisible(true);
+			return false;
+		}
+		if (!(projectEdit.getStartdate().getValue()).isBefore(projectEdit.getDeadline().getValue())) {
+
+			errorDate.setVisible(true);
+			return false;
+		}
+		DecimalFormat decimalFormatter = new DecimalFormat();
+		decimalFormatter.setParseBigDecimal(true);
+		if (projectEdit.getBudget() != null){
+				if (projectEdit.calculateBudget() > projectEdit.getBudget().getValue().intValueExact() ){
+					errorBudget.setTextFill(Color.RED);
+					errorBudget.setText("ERROR! Not enough money for project!");
+					errorBudget.setVisible(true);
+					return false;
+				}		
+		}else{
+			errorBudget.setText("ERROR! Budget musn't be empty!");
+			errorBudget.setVisible(true);
+			return false;
+		}
+		if (projectEdit.getEmployees() == null){
+			errorEmployees.setText("ERROR! You have to choose employees!");
+			errorEmployees.setVisible(true);
+			return false;
+		}
+		if (projectEdit.getTeams() == null){
+			errorTeams.setText("ERROR! You have to choose teams!");
+			errorTeams.setVisible(true);
+			return false;
+		}
 		return true;
 	}
 
