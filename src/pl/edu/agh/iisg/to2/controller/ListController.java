@@ -208,7 +208,7 @@ public class ListController {
 
             AddController controllerAdd = fxmlLoaderAdd.getController();
 			controllerAdd.setDialogStage(stageAdd);
-			controllerAdd.setData(projectTable.getItems(), employees, teams);
+			controllerAdd.setData(projectTable.getItems(),this.d);
 			
             stageAdd.showAndWait();
             System.out.println("Refreshing...");
@@ -232,7 +232,9 @@ public class ListController {
             
             EditController controllerEdit = fxmlLoaderEdit.getController();
             controllerEdit.setDialogStage(stageEdit);
-    		controllerEdit.setData(projectTable.getSelectionModel().getSelectedItem(), this.d);
+            ProjectMock editproject = projectTable.getSelectionModel().getSelectedItem();
+            projectTable.getItems().removeAll(projectTable.getSelectionModel().getSelectedItems());
+    		controllerEdit.setData(projectTable.getItems(), editproject, this.d);
             
             stageEdit.showAndWait();
             //projectTable.refresh(); 

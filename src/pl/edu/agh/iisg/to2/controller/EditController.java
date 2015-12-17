@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -49,6 +50,7 @@ public class EditController {
 	@FXML private TextField employeesTextField;
 	@FXML private TextField teamsTextField;
 	@FXML private TextField budgetTextField;
+	@FXML private TextField calculatedCost;
 	
 	@FXML private Button editEmployeesButton;
 	@FXML private Button editTeamsButton;
@@ -63,13 +65,13 @@ public class EditController {
 
 	private Stage dialogStage;
 	private ProjectMock projectEdit;
-	private boolean approved;
 
 	private LocalDateStringConverter converter;
 	private DateTimeFormatter formatter;
 	
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
+	private ObservableList<ProjectMock> projects;
 	
 	private GeneratedData d;
 	
@@ -97,11 +99,12 @@ public class EditController {
      }
 
 
-	public void setData(ProjectMock project, GeneratedData d) {
+	public void setData(ObservableList<ProjectMock> projects, ProjectMock project, GeneratedData d) {
 		this.projectEdit = project;
 		this.d = d;
 		this.teams = d.getTeams();
 		this.employees = d.getEmployees();
+		this.projects = projects;
 		updateControls();
 	}
 
@@ -109,7 +112,8 @@ public class EditController {
 	private void handleOkAction(ActionEvent event) {
 		updateModel();
 		if (isInputValid()){
-			//projectsTmp.add(project);
+			this.projects.add(projectEdit);
+			//setData(this.projectEdit, this.d);
 			Stage stage = (Stage) cancelButton.getScene().getWindow();
 			stage.close();
 		}else{
@@ -124,12 +128,54 @@ public class EditController {
 
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
-		//showPicker();
+		try {
+            FXMLLoader fxmlLoaderAddEmployee = new FXMLLoader();
+            fxmlLoaderAddEmployee.setLocation(Main.class.getResource("view/AddEmployee.fxml"));
+            Parent root1 = (Parent) fxmlLoaderAddEmployee.load();
+            
+            Stage stageAddEmployee = new Stage();
+            stageAddEmployee.initModality(Modality.APPLICATION_MODAL);
+            stageAddEmployee.setTitle("Add employees");
+            stageAddEmployee.setScene(new Scene(root1));  
+
+            AddEmployeeController controllerAddEmployee = fxmlLoaderAddEmployee.getController();
+			controllerAddEmployee.setDialogStage(stageAddEmployee);
+			controllerAddEmployee.setData(this.projectEdit, employees, 0);
+			
+            stageAddEmployee.showAndWait();
+            System.out.println("Refreshing...");
+    		String s2 = projectEdit.getStringEmployeesForProject().getValue();
+    		employeesTextField.setText(s2);
+            //projectTable.refresh(); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	@FXML
 	private void handleAddTeamsAction(ActionEvent event) {
-		//showPicker();
+		try {
+            FXMLLoader fxmlLoaderAddTeam = new FXMLLoader();
+            fxmlLoaderAddTeam.setLocation(Main.class.getResource("view/AddTeam.fxml"));
+            Parent root1 = (Parent) fxmlLoaderAddTeam.load();
+            
+            Stage stageAddTeams = new Stage();
+            stageAddTeams.initModality(Modality.APPLICATION_MODAL);
+            stageAddTeams.setTitle("Add teams");
+            stageAddTeams.setScene(new Scene(root1));  
+
+            AddTeamsController controllerAddTeam = fxmlLoaderAddTeam.getController();
+			controllerAddTeam.setDialogStage(stageAddTeams);
+			controllerAddTeam.setData(this.projectEdit, this.teams,0);
+			
+            stageAddTeams.showAndWait();
+            System.out.println("Refreshing...");
+            String s1 = projectEdit.getStringTeamsForProject().getValue();
+    		teamsTextField.setText(s1);
+            //projectTable.refresh(); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 
@@ -172,8 +218,12 @@ public class EditController {
 	}
 
 	private void updateModel() {
-		if (deadlineDatePicker.getValue() != null) projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
-		if (startdateDatePicker.getValue() != null) projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		if (deadlineDatePicker.getValue() != null){
+			projectEdit.setDeadline(new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue()));
+		}
+		if (startdateDatePicker.getValue() != null){
+			projectEdit.setStartdate(new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue()));
+		}
 		
 		if (!(budgetTextField.getText().isEmpty())){
 			DecimalFormat decimalFormatter = new DecimalFormat();
@@ -229,4 +279,23 @@ public class EditController {
 	public void setConverter(LocalDateStringConverter converter) {
 		this.converter = converter;
 	}
+	
+	@FXML
+	private void handleCalculateAction(ActionEvent event) {
+		BigDecimal budget = new BigDecimal(0);
+		ObjectProperty<LocalDate> deadline =  new SimpleObjectProperty<LocalDate>(deadlineDatePicker.getValue());
+		ObjectProperty<LocalDate> startdate =  new SimpleObjectProperty<LocalDate>(startdateDatePicker.getValue());
+		long days = ChronoUnit.DAYS.between(deadline.getValue(), startdate.getValue());
+		int daysInt = toIntExact(days);
+		ObservableList<ITeam> ttmp = FXCollections.observableArrayList();
+		ttmp.addAll(FindTeams.setTeamsFromString(teamsTextField.getText(), teams));
+		ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
+		etmp.addAll(FindEmployees.setEmployeesFromString(employeesTextField.getText(), employees));
+		for (IEmployee e: etmp ) budget = budget.add(e.getSalary());
+		for (ITeam t: ttmp) budget = budget.add(t.getCostOfTeam());
+		budget = budget.multiply(new BigDecimal(daysInt*8)); 
+		int tmp = budget.intValueExact();
+		calculatedCost.setText(Integer.toString(tmp));	
+	}
+
 }

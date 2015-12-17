@@ -67,9 +67,11 @@
 				</TextField>
             <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" />
             <DatePicker fx:id="startdateDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-				 <Button fx:id="editEmployeesButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddEmployeesAction" text="AddEmployees" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                 <Button fx:id="editTeamsButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTeamsAction" text="AddTeams" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-
+			<Button fx:id="editEmployeesButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddEmployeesAction" text="AddEmployees" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Button fx:id="editTeamsButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleAddTeamsAction" text="AddTeams" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+			<Button fx:id="calculateBudget" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleCalculateAction" text="calculateBudget" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+            <TextField fx:id="calculatedCost" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+            <Label prefHeight="17.0" prefWidth="66.0" text="Calculated" GridPane.rowIndex="18" />
 			</children>
 		</GridPane>
 	</center>

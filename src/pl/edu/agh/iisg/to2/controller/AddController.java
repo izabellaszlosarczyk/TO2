@@ -95,10 +95,11 @@ public class AddController {
 		this.dialogStage = dialogStage;
 	}
 
-	public void setData(ObservableList<ProjectMock> projects, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
+	public void setData(ObservableList<ProjectMock> projects, GeneratedData d) {
+		this.d = d;
 		this.projectsTmp = projects;
-		this.teams = t;
-		this.employees = e;
+		this.teams = d.getTeams();
+		this.employees = d.getEmployees();
 	}
 	
 	@FXML
