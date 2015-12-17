@@ -38,6 +38,7 @@
             <RowConstraints minHeight="10.0" />
             <RowConstraints minHeight="10.0" />
             <RowConstraints minHeight="10.0" />
+            <RowConstraints minHeight="10.0" />
 			</rowConstraints>
 			<children>
 				<Label text="Deadline">
@@ -89,6 +90,8 @@
             <Label fx:id="errorEmployees" prefHeight="17.0" prefWidth="406.0" text="ERROR! Problem with employees!" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="errorTeams" prefHeight="17.0" prefWidth="338.0" text="ERROR! Problem with teams!" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label fx:id="errorBudget" prefHeight="17.0" prefWidth="344.0" text="ERROR! Budget for these parameters is incorrect!" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="calculatedCost" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+            <Label prefHeight="17.0" prefWidth="66.0" text="Calculated" GridPane.rowIndex="18" />
         
 			</children>
 		</GridPane>

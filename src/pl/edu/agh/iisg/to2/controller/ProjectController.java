@@ -15,6 +15,7 @@ import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
 import pl.edu.agh.iisg.to2.model.DataGenerator;
+import pl.edu.agh.iisg.to2.model.GeneratedData;
 
 public class ProjectController {
 
@@ -22,6 +23,7 @@ public class ProjectController {
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
 	private Stage primaryStage;
+	private GeneratedData data;
 
 	public ProjectController(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -42,14 +44,13 @@ public class ProjectController {
 	public void generateMockData() {
 		int numberOfEmployees = 12;
 		int numberOFTeams = 5;
-		List<IEmployee> e = new ArrayList<>(DataGenerator.generateEmployees(numberOfEmployees));
-		List<ITeam> t = new ArrayList<>(DataGenerator.generateTeams(numberOFTeams));
-		this.employees = FXCollections.observableArrayList(e);
-		this.teams = FXCollections.observableArrayList(t);
+		this.data = new GeneratedData();
+		this.employees = FXCollections.observableArrayList(data.getEmployees());
+		this.teams = FXCollections.observableArrayList(data.getTeams());
 		this.projects = FXCollections.observableArrayList();
 		int i = 0;
-		for (i = 0; i < 9; i = i + 1){
-			this.projects.add(DataGenerator.generateProject(e, t, numberOfEmployees ,numberOFTeams));
+		for (i = 0; i < 15; i = i + 1){
+			this.projects.add(DataGenerator.generateProjectWithMultipleTeamsEmployees(data, numberOfEmployees ,numberOFTeams));
 		}
 	}
 	public void initRootLayout() {
@@ -65,7 +66,7 @@ public class ProjectController {
 			
 			ListController controller = loader.getController();
 			generateMockData();
-			controller.setData(projects, employees, teams, 0);
+			controller.setData(projects, this.data , 0);
 			controller.setProjController(this);
 			
 			Scene scene = new Scene(rootLayout);

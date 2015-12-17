@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -36,6 +37,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateStringConverter;
 import pl.edu.agh.iisg.to2.Main;
+import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
@@ -50,6 +52,7 @@ public class AddController {
 	@FXML private TextField employeesTextField;
 	@FXML private TextField teamsTextField;
 	@FXML private TextField budgetTextField;
+	@FXML private TextField calculatedCost;
 	
 	
 	@FXML private Button addEmployeesButton;
@@ -69,6 +72,7 @@ public class AddController {
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
 	
+	private GeneratedData d;
 	
 	@FXML
 	public void initialize() {
@@ -124,7 +128,7 @@ public class AddController {
 		for (ITeam t: ttmp) budget = budget.add(t.getCostOfTeam());
 		budget = budget.multiply(new BigDecimal(daysInt*8)); 
 		int tmp = budget.intValueExact();
-		budgetTextField.setText(Integer.toString(tmp));	
+		calculatedCost.setText(Integer.toString(tmp));	
 	}
 
 	@FXML
@@ -135,15 +139,54 @@ public class AddController {
 
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
-		//dialogStage.close();
-        //FXMLLoader loader = new FXMLLoader();
-        //loader.setLocation(Main.class.getResource("AddEmployee.fxml"));
-        // dokonczyc
+		try {
+            FXMLLoader fxmlLoaderAddEmployee = new FXMLLoader();
+            fxmlLoaderAddEmployee.setLocation(Main.class.getResource("view/AddEmployee.fxml"));
+            Parent root1 = (Parent) fxmlLoaderAddEmployee.load();
+            
+            Stage stageAddEmployee = new Stage();
+            stageAddEmployee.initModality(Modality.APPLICATION_MODAL);
+            stageAddEmployee.setTitle("Add employees");
+            stageAddEmployee.setScene(new Scene(root1));  
+
+            AddEmployeeController controllerAddEmployee = fxmlLoaderAddEmployee.getController();
+			controllerAddEmployee.setDialogStage(stageAddEmployee);
+			controllerAddEmployee.setData(this.project, employees, 0);
+			
+            stageAddEmployee.showAndWait();
+            System.out.println("Refreshing...");
+    		String s2 = project.getStringEmployeesForProject().getValue();
+    		employeesTextField.setText(s2);
+            //projectTable.refresh(); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	@FXML
 	private void handleAddTeamsAction(ActionEvent event) {
-		dialogStage.close();
+		try {
+            FXMLLoader fxmlLoaderAddTeam = new FXMLLoader();
+            fxmlLoaderAddTeam.setLocation(Main.class.getResource("view/AddTeam.fxml"));
+            Parent root1 = (Parent) fxmlLoaderAddTeam.load();
+            
+            Stage stageAddTeams = new Stage();
+            stageAddTeams.initModality(Modality.APPLICATION_MODAL);
+            stageAddTeams.setTitle("Add teams");
+            stageAddTeams.setScene(new Scene(root1));  
+
+            AddTeamsController controllerAddTeam = fxmlLoaderAddTeam.getController();
+			controllerAddTeam.setDialogStage(stageAddTeams);
+			controllerAddTeam.setData(this.project, this.teams,0);
+			
+            stageAddTeams.showAndWait();
+            System.out.println("Refreshing...");
+            String s1 = project.getStringTeamsForProject().getValue();
+    		teamsTextField.setText(s1);
+            //projectTable.refresh(); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
 	private boolean isInputValid() {

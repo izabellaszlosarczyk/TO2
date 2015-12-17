@@ -31,6 +31,9 @@ public class AddEmployeeController {
 		
 		@FXML private TextField employeeTextField;
 
+		private Stage dialogStage;
+		private int type;
+
 		private ProjectController projController; 
 		private ProjectMock project;
 		private ObservableList<IEmployee> employees;
@@ -58,16 +61,15 @@ public class AddEmployeeController {
 		@FXML
 		private void handleAddAction(ActionEvent event) {
 	        	IEmployee etmp = employeeTable.getSelectionModel().getSelectedItem();
-	        	if (this.project.getEmployees() != null){
-	        		this.project.getEmployees().add(etmp);
-	        	}else{
+	        	if (this.type == 0){
 	        		ObservableList<IEmployee> e = FXCollections.observableArrayList(etmp);
 	        		this.project.setEmployees(e);
+	        		this.type = 1;
+	        	}else{
+	        		this.project.addEmployee(etmp);
 	        	}
-	        	employeeTable.getItems().removeAll(employeeTable.getSelectionModel().getSelectedItems());
 	        	employeeTextField.setText(project.getStringEmployeesForProject().getValue());
 	        	employeeTable.getItems().removeAll(employeeTable.getSelectionModel().getSelectedItems());
-	            
 	        	
 	            System.out.println("Refreshing...");
 	            employeeTable.refresh(); 
@@ -75,13 +77,23 @@ public class AddEmployeeController {
 		
 		@FXML
 		private void handleOkAction(ActionEvent event) {
-			if (this.project.getEmployees() == null){
-				errorEmployees.setText("You didn't choose employees");
-				errorEmployees.setVisible(false);
+			if (isValid()){
+				Stage stage = (Stage) cancelButton.getScene().getWindow();
+				stage.close();
 			}
 		}
 		
-		public void setData(ProjectMock p, ObservableList<IEmployee> e) {
+		private boolean isValid(){
+			if ( employeeTextField.getText().isEmpty() == true){
+				errorEmployees.setText("You didn't choose employees");
+				errorEmployees.setVisible(true);
+				return false;
+			}
+			return true;
+		}
+		
+		public void setData(ProjectMock p, ObservableList<IEmployee> e, int i) {
+			this.type = i;
 			this.employees = e;
 			this.project = p;
 			employeeTable.getItems().setAll(e);
@@ -93,7 +105,11 @@ public class AddEmployeeController {
 
 		public void setProjController(ProjectController projController) {
 			this.projController = projController;
-		}		
+		}	
+		
+		public void setDialogStage(Stage dialogStage) {
+			this.dialogStage = dialogStage;
+		}
 		
 }
 

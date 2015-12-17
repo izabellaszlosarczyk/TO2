@@ -35,6 +35,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateStringConverter;
 import pl.edu.agh.iisg.to2.Main;
+import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
@@ -70,6 +71,8 @@ public class EditController {
 	private ObservableList<ITeam> teams;
 	private ObservableList<IEmployee> employees;
 	
+	private GeneratedData d;
+	
 	@FXML
 	public void initialize() {
 		String pattern = "yyyy-MM-dd";
@@ -94,30 +97,23 @@ public class EditController {
      }
 
 
-	public void setData(ProjectMock project, ObservableList<IEmployee> e, ObservableList<ITeam> t) {
+	public void setData(ProjectMock project, GeneratedData d) {
 		this.projectEdit = project;
-		this.teams = t;
-		this.employees = e;
+		this.d = d;
+		this.teams = d.getTeams();
+		this.employees = d.getEmployees();
 		updateControls();
 	}
 
-	public boolean isApproved() {
-		return approved;
-	}
-	
 	@FXML
 	private void handleOkAction(ActionEvent event) {
-		approved = true;
-		if (!isApproved()) {
-			//error.setTextFill(Color.RED);
-			//error.setText("Error: You have blank spaces");
-		} else {
-			approved = true;
-		}
-		if (isInputValid()) {
-			updateModel();
-			dialogStage.close();
-			//sprawdz
+		updateModel();
+		if (isInputValid()){
+			//projectsTmp.add(project);
+			Stage stage = (Stage) cancelButton.getScene().getWindow();
+			stage.close();
+		}else{
+			
 		}
 	}
 	
@@ -129,17 +125,15 @@ public class EditController {
 	@FXML
 	private void handleAddEmployeesAction(ActionEvent event) {
 		//showPicker();
-		dialogStage.close();
 	}
 	
 	@FXML
 	private void handleAddTeamsAction(ActionEvent event) {
 		//showPicker();
-		dialogStage.close();
 	}
 	
 
-	private boolean isInputValid() {
+	private boolean isInputValid() {/*
 		if (projectEdit.getDeadline() == null || projectEdit.getDeadline().getValue() == null || projectEdit.getStartdate() == null || projectEdit.getStartdate().getValue() == null) {
 			errorDate.setText("ERROR! Deadline or startdate is empty!");
 			errorDate.setVisible(true);
@@ -158,7 +152,7 @@ public class EditController {
 					errorBudget.setText("ERROR! Not enough money for project!");
 					errorBudget.setVisible(true);
 					return false;
-				}		
+				}	
 		}else{
 			errorBudget.setText("ERROR! Budget musn't be empty!");
 			errorBudget.setVisible(true);
@@ -173,7 +167,7 @@ public class EditController {
 			errorTeams.setText("ERROR! You have to choose teams!");
 			errorTeams.setVisible(true);
 			return false;
-		}
+		}*/
 		return true;
 	}
 

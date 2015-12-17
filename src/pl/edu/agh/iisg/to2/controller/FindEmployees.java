@@ -4,10 +4,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 
 public class FindEmployees {
 
+	public static ObservableList<IEmployee> findAllEmployees(GeneratedData d){
+		return d.getEmployees();
+	}
 
 	public static ObservableList<IEmployee> findWithNameAndSureName(String name, String surname, ObservableList<IEmployee> e){
 		ObservableList<IEmployee> empl = FXCollections.observableArrayList();

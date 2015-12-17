@@ -32,8 +32,11 @@ public class AddTeamsController {
 		private ProjectController projController; 
 		private ProjectMock project;
 		private ObservableList<ITeam> teams;
+		
+		private Stage dialogStage;
+		private int type;
 
-		@FXML private Label errorEmployees;
+		@FXML private Label errorTeams;
 		
 		
 		@FXML
@@ -42,7 +45,7 @@ public class AddTeamsController {
 			nameOfTeamColumn.setCellValueFactory(value -> value.getValue().getNameofTeamObservable());
 			costOfTeamColumn.setCellValueFactory(value -> value.getValue().getCostOfTeamObservable());
 			addButton.disableProperty().bind(Bindings.isEmpty(teamTable.getSelectionModel().getSelectedItems()));
-			errorEmployees.setVisible(false);
+			errorTeams.setVisible(false);
 		}
 		
 		@FXML
@@ -54,31 +57,42 @@ public class AddTeamsController {
 
 		@FXML
 		private void handleAddAction(ActionEvent event) {
-	        	ITeam ttmp = teamTable.getSelectionModel().getSelectedItem();
-	        	if (this.project.getTeams() != null){
-	        		this.project.getTeams().add(ttmp);
-	        	}else{
-	        		ObservableList<ITeam> e = FXCollections.observableArrayList(ttmp);
-	        		this.project.setTeams(e);
-	        	}
-	        	teamsTextField.setText(project.getStringTeamsForProject().getValue());
-	        	teamTable.getItems().removeAll(teamTable.getSelectionModel().getSelectedItems());
+			ITeam ttmp = teamTable.getSelectionModel().getSelectedItem();
+			if (this.type == 0){
+				ObservableList<ITeam> e = FXCollections.observableArrayList(ttmp);
+        		this.project.setTeams(e);
+        		this.type = 1;
+			}else{
+				this.project.addTeam(ttmp);
+			}
+	        teamsTextField.setText(project.getStringTeamsForProject().getValue());
+	        teamTable.getItems().removeAll(teamTable.getSelectionModel().getSelectedItems());
 	        	
-	            System.out.println("Refreshing...");
-	            teamTable.refresh(); 
+	        System.out.println("Refreshing...");
+	        teamTable.refresh(); 
 		}
 		
 		@FXML
 		private void handleOkAction(ActionEvent event) {
-			if (this.project.getEmployees() == null){
-				errorEmployees.setText("You didn't choose employees");
-				errorEmployees.setVisible(false);
+			if (isValid()){
+				Stage stage = (Stage) cancelButton.getScene().getWindow();
+				stage.close();
 			}
 		}
 		
-		public void setData(ProjectMock p, ObservableList<ITeam> t) {
+		private boolean isValid(){
+			if ( teamsTextField.getText().isEmpty() == true){
+				errorTeams.setText("You didn't choose employees");
+				errorTeams.setVisible(true);
+				return false;
+			}
+			return true;
+		}
+		
+		public void setData(ProjectMock p, ObservableList<ITeam> t, int i) {
 			this.teams = t;
 			this.project = p;
+			this.type = i;
 			teamTable.getItems().setAll(t);
 		}
 		
@@ -88,7 +102,11 @@ public class AddTeamsController {
 
 		public void setProjController(ProjectController projController) {
 			this.projController = projController;
-		}		
+		}
+		
+		public void setDialogStage(Stage dialogStage) {
+			this.dialogStage = dialogStage;
+		}
 		
 }
 

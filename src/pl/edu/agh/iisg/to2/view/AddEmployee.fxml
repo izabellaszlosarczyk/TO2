@@ -26,22 +26,23 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="add Employees" />
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddAction" text="add Employees" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="okey!" />
+                  <Button fx:id="okButton" mnemonicParsing="false" onAction="#handleOkAction" text="okey!" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="cancel" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelAction" text="cancel" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="330.0">
                <children>
-                  <TextField  fx:id="employeeTextField"/>
+                  <Label fx:id="errorEmployees" prefHeight="17.0" prefWidth="124.0" text="ERROR!" />
+                  <TextField fx:id="employeeTextField" />
                </children>
             </HBox>
          </children>

@@ -1,18 +1,20 @@
 package pl.edu.agh.iisg.to2.controller;
 
-import java.util.List;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.ITeam;
 
 public class FindTeams {
 
 
+	public static ObservableList<ITeam> findAllTeams(GeneratedData d){
+		return d.getTeams();
+	}
 	
-	public static List<ITeam> findTeamsWithName(String name, ObservableList<ITeam> t){
+	public static ObservableList<ITeam> findTeamsWithName(String name, ObservableList<ITeam> t){
 
 		ObservableList<ITeam> tmpWithName = FXCollections.observableArrayList();
 		tmpWithName.addAll(t);

@@ -81,6 +81,14 @@ public class ProjectMock implements IProject {
 	public void setTeams(ObservableList<ITeam> teams) {
 		this.teams = teams;
 	}
+	
+	public void addTeams(ObservableList<ITeam> teams) {
+		this.teams.addAll(teams);
+	}
+	
+	public void addTeam(ITeam team) {
+		this.teams.add(team);
+	}
 
 	public ObservableList<IEmployee> getEmployees() {
 		return employees;
@@ -88,6 +96,14 @@ public class ProjectMock implements IProject {
 
 	public void setEmployees(ObservableList<IEmployee> employees) {
 		this.employees = employees;
+	}
+	
+	public void addEmployees(ObservableList<IEmployee> employees) {
+		this.employees.addAll(employees);
+	}
+	
+	public void addEmployee(IEmployee employee) {
+		this.employees.add(employee);
 	}
 	
 	public ObjectProperty<BigDecimal> getBudget() {

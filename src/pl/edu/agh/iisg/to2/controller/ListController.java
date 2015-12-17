@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateStringConverter;
 import pl.edu.agh.iisg.to2.Main;
+import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
@@ -65,6 +66,8 @@ public class ListController {
 	@FXML private Label errorBudget;
 	
 	private DateTimeFormatter formatter;
+	
+	private GeneratedData d;
 	
 	
 	@FXML
@@ -165,13 +168,13 @@ public class ListController {
 			System.out.println("koncowe:"+ tmpp.getDeadline().getValue().toString()+ tmpp.getDeadline().getValue().toString());
 		}
 		if (areParametersValid()){
-			setData(tmpWithArguments, this.employees , this.teams, 1);
+			setData(tmpWithArguments, this.d, 1);
 		}	
 	}
 	
 	@FXML
 	private void handleAllProjectsAction(ActionEvent event) {
-		setData(this.projectsTmp, this.employees , this.teams, 1);
+		setData(this.projectsTmp, this.d, 1);
 	}
 	
 
@@ -221,6 +224,7 @@ public class ListController {
             FXMLLoader fxmlLoaderEdit = new FXMLLoader();
             fxmlLoaderEdit.setLocation(Main.class.getResource("view/EditView.fxml"));
             Parent root1 = (Parent) fxmlLoaderEdit.load();
+            
             Stage stageEdit = new Stage();
             stageEdit.initModality(Modality.APPLICATION_MODAL);
             stageEdit.setTitle("Edit project");
@@ -228,7 +232,7 @@ public class ListController {
             
             EditController controllerEdit = fxmlLoaderEdit.getController();
             controllerEdit.setDialogStage(stageEdit);
-    		controllerEdit.setData(projectTable.getSelectionModel().getSelectedItem(), this.employees, this.teams);
+    		controllerEdit.setData(projectTable.getSelectionModel().getSelectedItem(), this.d);
             
             stageEdit.showAndWait();
             //projectTable.refresh(); 
@@ -240,8 +244,9 @@ public class ListController {
         
 	}
 	
-	public void setData(ObservableList<ProjectMock> p, ObservableList<IEmployee> e, ObservableList<ITeam> t, int i) {
-		this.employees = e;
+	public void setData(ObservableList<ProjectMock> p, GeneratedData d, int i) {
+		this.d = d;
+		this.employees = d.getEmployees();
 		if (i == 0){
 			this.projectsTmp = p;
 		}
@@ -249,7 +254,7 @@ public class ListController {
 		for (ProjectMock ptmp: p){
 			System.out.println("deadline: "+ ptmp.getDeadline().getValue().toString()+ "startdate: "+ ptmp.getStartdate().getValue().toString() + "\n");
 		} 
-		this.teams = t;
+		this.teams = d.getTeams();
 		projectTable.getItems().setAll(p);
 	}
 	
