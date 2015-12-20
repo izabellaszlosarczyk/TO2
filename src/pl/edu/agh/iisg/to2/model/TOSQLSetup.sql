@@ -1,8 +1,9 @@
-
+DROP TABLE IProject_Team;
+DROP TABLE IProject;
 
 CREATE TABLE IProject (
 	id			INTEGER AUTO_INCREMENT PRIMARY KEY,
-	projectId	INTEGER UNIQUE,
+	projectId	VARCHAR(50) UNIQUE,
 	deadline	DATE,
 	startDate	DATE,
 	budget		INTEGER
@@ -10,10 +11,12 @@ CREATE TABLE IProject (
 
 CREATE TABLE IProject_Team (
 	id			INTEGER AUTO_INCREMENT PRIMARY KEY,
-	teamId		INTEGER,
-	projectId	INTEGER,
+	teamId		VARCHAR(50),
+	projectId	VARCHAR(50),
 	FOREIGN KEY (projectId) REFERENCES IProject(projectId)
 );
+
+INSERT INTO IProject (projectId, deadline, startDate, budget) VALUES ("1", "2016-01-01", "2015-01-01", 10000);
 
 
 --DROP TABLE IProject;
