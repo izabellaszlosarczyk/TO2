@@ -40,6 +40,7 @@ import pl.edu.agh.iisg.to2.Main;
 import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
+import pl.edu.agh.iisg.to2.model.MySQLAccess;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
 
 public class AddController {
@@ -267,7 +268,19 @@ public class AddController {
 			etmp.addAll(FindEmployees.setEmployeesFromString(employeesTextField.getText(), employees));
 			project.setEmployees(etmp);
 		}
-		 
+		
+		
+		
+		saveToDatabase();
+	}
+	
+	private void saveToDatabase()  {
+		MySQLAccess dao = new MySQLAccess();
+	    try {
+			dao.insertProject(project);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void initAddEmployeesDialog() {

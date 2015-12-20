@@ -13,22 +13,25 @@ public class MySQLAccess {
      
 private Connection connect = null;
 private Statement statement = null;
-private PreparedStatement preparedStatement = null;
 private ResultSet resultSet = null;
 
 final private String host = "localhost";
 final private String user = "root";
 final private String passwd = "";
 
+public void connect() throws ClassNotFoundException, SQLException {
+	// This will load the MySQL driver, each DB has its own driver
+	   Class.forName("com.mysql.jdbc.Driver");
+	   
+	   // Setup the connection with the DB
+	   connect = DriverManager
+	       .getConnection("jdbc:mysql://" + host + "/TOProjects?"
+	           + "user=" + user + "&password=" + passwd );
+}
+
 public void readDataBase() throws Exception {
  try {
-   // This will load the MySQL driver, each DB has its own driver
-   Class.forName("com.mysql.jdbc.Driver");
-   
-   // Setup the connection with the DB
-   connect = DriverManager
-       .getConnection("jdbc:mysql://" + host + "/TOProjects?"
-           + "user=" + user + "&password=" + passwd );
+   connect();
 
    // Statements allow to issue SQL queries to the database
    statement = connect.createStatement();
@@ -38,17 +41,7 @@ public void readDataBase() throws Exception {
    writeResultSet(resultSet);
 
 //   // PreparedStatements can use variables and are more efficient
-//   preparedStatement = connect
-//       .prepareStatement("insert into  feedback.comments values (default, ?, ?, ?, ? , ?, ?)");
-//   // "myuser, webpage, datum, summary, COMMENTS from feedback.comments");
-//   // Parameters start with 1
-//   preparedStatement.setString(1, "Test");
-//   preparedStatement.setString(2, "TestEmail");
-//   preparedStatement.setString(3, "TestWebpage");
-//   preparedStatement.setDate(4, new java.sql.Date(2009, 12, 11));
-//   preparedStatement.setString(5, "TestSummary");
-//   preparedStatement.setString(6, "TestComment");
-//   preparedStatement.executeUpdate();
+
 //
 //   preparedStatement = connect
 //       .prepareStatement("SELECT myuser, webpage, datum, summary, COMMENTS from feedback.comments");
@@ -72,6 +65,35 @@ public void readDataBase() throws Exception {
  }
 
 }
+
+
+public void insertProject(IProject project) throws SQLException, ClassNotFoundException
+{
+	connect();
+	
+	System.out.println("Tworz statement");
+	System.out.println(project.getId());
+	System.out.println(project.getDeadline());
+	System.out.println(project.getStartdate());
+	System.out.println(project.getBudget());
+	
+	String command = "INSERT INTO TOProjects.IProject (projectId, deadline, startDate, budget) VALUES "
+			+ "(\"" + project.getId() + "\", "
+			+ "\"" + project.getDeadline().getValue() + "\", "
+			+ "\"" + project.getStartdate().getValue() + "\", "
+			+ project.getBudget().getValue() + ")";
+	
+	System.out.println(command);
+	
+	PreparedStatement preparedStatement = connect.prepareStatement(command);
+	
+	System.out.println("Statement: " + preparedStatement);
+	preparedStatement.executeUpdate();
+	System.out.println("did execute");
+	
+	close();
+}
+
 
 private void writeMetaData(ResultSet resultSet) throws SQLException {
  //   Now get some metadata from the database
