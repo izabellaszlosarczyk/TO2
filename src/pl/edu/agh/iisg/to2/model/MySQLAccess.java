@@ -1,5 +1,7 @@
 package pl.edu.agh.iisg.to2.model;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 //Adapted from http://www.vogella.com/tutorials/MySQLJava/article.html
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javafx.collections.ObservableList;
 
 public class MySQLAccess {
      
@@ -66,6 +75,40 @@ public void readDataBase() throws Exception {
 
 }
 
+public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundException
+{
+	ArrayList<ProjectMock> projectsList = new ArrayList<ProjectMock>();
+	
+	 try {
+		   connect();
+		   statement = connect.createStatement();
+		   resultSet = statement.executeQuery("SELECT * FROM IProject");
+
+		   while (resultSet.next()) {
+			   Date sDate = resultSet.getDate("startDate");
+			   Date deadDate = resultSet.getDate("deadline");
+			   int budget = resultSet.getInt("budget");
+			   
+			   LocalDate startDate = Instant.ofEpochMilli(sDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+			   LocalDate deadline = Instant.ofEpochMilli(deadDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+			   
+			   ArrayList<ITeam> teams = new ArrayList<ITeam>(); // TODO: Connect with Team Modules
+			   ArrayList<IEmployee> employees = new ArrayList<IEmployee>();	// TODO: Connect Employees module
+			   BigDecimal budgetDecimal = new BigDecimal(BigInteger.valueOf(budget));
+
+			   ProjectMock p = new ProjectMock(deadline, startDate, teams, employees, budgetDecimal);
+			   projectsList.add(p);
+		   }
+
+		 } catch (Exception e) {
+		   throw e;
+		 } finally {
+		   close();
+		 }
+	 System.out.println("ok");
+	return projectsList;
+}
 
 public void insertProject(IProject project) throws SQLException, ClassNotFoundException
 {

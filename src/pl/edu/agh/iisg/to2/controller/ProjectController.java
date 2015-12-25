@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import pl.edu.agh.iisg.to2.Main;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
+import pl.edu.agh.iisg.to2.model.MySQLAccess;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
 import pl.edu.agh.iisg.to2.model.DataGenerator;
 import pl.edu.agh.iisg.to2.model.GeneratedData;
@@ -49,9 +50,18 @@ public class ProjectController {
 		this.teams = FXCollections.observableArrayList(data.getTeams());
 		this.projects = FXCollections.observableArrayList();
 		int i = 0;
-		for (i = 0; i < 15; i = i + 1){
-			this.projects.add(DataGenerator.generateProjectWithMultipleTeamsEmployees(data, numberOfEmployees ,numberOFTeams));
+//		for (i = 0; i < 15; i = i + 1){
+//			this.projects.add(DataGenerator.generateProjectWithMultipleTeamsEmployees(data, numberOfEmployees ,numberOFTeams));
+//		}
+		
+		MySQLAccess sqlAccess = new MySQLAccess();
+	    try {
+	    	List<ProjectMock> fetched = sqlAccess.fetchAllProjects();
+	    	this.projects.addAll(fetched);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 	}
 	public void initRootLayout() {
 		try {
