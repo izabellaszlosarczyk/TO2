@@ -75,6 +75,33 @@ public void readDataBase() throws Exception {
 
 }
 
+public ArrayList<ITeam> fetchTeamsObjectsForProject(String projectId) throws SQLException, ClassNotFoundException
+{
+	Statement fetchStatement = null;
+	ResultSet teamSet = null;
+	
+	fetchStatement = connect.createStatement();
+	teamSet = fetchStatement.executeQuery("SELECT * FROM IProject_Team WHERE projectId="
+			+ "\"" + projectId + "\"");
+
+	ArrayList<ITeam> teamsList = new ArrayList<ITeam>();
+	while (teamSet.next()) {
+		String teamId = teamSet.getString("teamId");
+		System.out.println("Fetch team with id " + teamId);
+		
+		// ===========================================================//
+		// 				TODO: Fetch from other modules
+		// TeamMock team = fetch team with id = teamId;
+		//
+		// ===========================================================//
+		
+		TeamMock team = new TeamMock(teamId);
+		teamsList.add(team);
+	}	
+	
+	return teamsList;
+}
+
 public ArrayList<IEmployee> fetchEmployeeObjectsForProject(String projectId) throws SQLException, ClassNotFoundException
 {
 	Statement fetchStatement = null;
@@ -88,8 +115,12 @@ public ArrayList<IEmployee> fetchEmployeeObjectsForProject(String projectId) thr
 	while (employeeSet.next()) {
 		String employeeId = employeeSet.getString("employeeId");
 		System.out.println("Fetch emplotee with id " + employeeId);
-		// TODO: Fetch from other modules
-//		IEmployee employee = fetch employee with id = employeeId;
+		
+		// ===========================================================//
+		// 				TODO: Fetch from other modules
+		// IEmployee employee = fetch employee with id = employeeId;
+		//
+		// ===========================================================//
 		
 		EmployeeMock employee = new EmployeeMock(employeeId, "", "", "", BigDecimal.valueOf(100));
 		employeeList.add(employee);
@@ -117,15 +148,13 @@ public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundEx
 			   LocalDate deadline = Instant.ofEpochMilli(deadDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 
 			   
-			   ArrayList<ITeam> teams = new ArrayList<ITeam>(); // TODO: Connect with Team Modules
+			   ArrayList<ITeam> teams = this.fetchTeamsObjectsForProject(projectId);
 			   ArrayList<IEmployee> employees = this.fetchEmployeeObjectsForProject(projectId);
 			   BigDecimal budgetDecimal = new BigDecimal(BigInteger.valueOf(budget));
 
 			   ProjectMock p = new ProjectMock(deadline, startDate, teams, employees, budgetDecimal);
 			   p.setId(projectId);
-			   
-			   
-			   
+			  
 			   projectsList.add(p);
 		   }
 
@@ -155,8 +184,35 @@ public void insertProject(IProject project) throws SQLException, ClassNotFoundEx
 		System.out.println("Add relationship...");
 		this.insertEmployeeRelationship(project, employee);
 	} 
+	// Add relationships with Team
+	for (ITeam team: project.getTeams()){
+		System.out.println("Add team relationship...");
+		this.insertTeamRelationship(project, team);
+	} 
 	
 	close();
+}
+
+
+
+
+private void insertTeamRelationship(IProject project, ITeam team) throws SQLException, ClassNotFoundException
+{
+	String command = "INSERT INTO TOProjects.IProject_Team (teamId, projectId) VALUES "
+			+ "(\"" + team.getId() + "\", "
+			+ "\"" + project.getId() + "\")";
+	System.out.println(command);
+	PreparedStatement preparedStatement = connect.prepareStatement(command);
+	preparedStatement.executeUpdate();
+}
+
+private void removeAllTeamRelationships(IProject project) throws SQLException, ClassNotFoundException
+{
+	String command = "DELETE FROM TOProjects.IProject_Team WHERE projectId="
+			+ "\"" + project.getId() + "\"";
+	System.out.println(command);
+	PreparedStatement preparedStatement = connect.prepareStatement(command);
+	preparedStatement.executeUpdate();
 }
 
 private void insertEmployeeRelationship(IProject project, IEmployee employee) throws SQLException, ClassNotFoundException
@@ -197,10 +253,15 @@ public void updateProject(IProject project) throws SQLException, ClassNotFoundEx
 	
 	// Remove all Employee relationships
 	this.removeAllEmployeeRelationships(project);
+	this.removeAllTeamRelationships(project);
 	
 	// and recreate them once again
 	for (IEmployee employee: project.getEmployees()){
 		this.insertEmployeeRelationship(project, employee);
+	}
+	// and recreate them once again
+	for (ITeam team: project.getTeams()){
+		this.insertTeamRelationship(project, team);
 	}
 	
 	close();
