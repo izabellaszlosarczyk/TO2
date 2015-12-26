@@ -75,6 +75,29 @@ public void readDataBase() throws Exception {
 
 }
 
+public ArrayList<IEmployee> fetchEmployeeObjectsForProject(String projectId) throws SQLException, ClassNotFoundException
+{
+	Statement fetchStatement = null;
+	ResultSet employeeSet = null;
+	
+	fetchStatement = connect.createStatement();
+	employeeSet = fetchStatement.executeQuery("SELECT * FROM IProject_Employee WHERE projectId="
+			+ "\"" + projectId + "\"");
+
+	ArrayList<IEmployee> employeeList = new ArrayList<IEmployee>();
+	while (employeeSet.next()) {
+		String employeeId = employeeSet.getString("employeeId");
+		System.out.println("Fetch emplotee with id " + employeeId);
+		// TODO: Fetch from other modules
+//		IEmployee employee = fetch employee with id = employeeId;
+		
+		EmployeeMock employee = new EmployeeMock(employeeId, "", "", "", BigDecimal.valueOf(100));
+		employeeList.add(employee);
+	}	
+	
+	return employeeList;
+}
+
 public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundException
 {
 	ArrayList<ProjectMock> projectsList = new ArrayList<ProjectMock>();
@@ -95,11 +118,14 @@ public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundEx
 
 			   
 			   ArrayList<ITeam> teams = new ArrayList<ITeam>(); // TODO: Connect with Team Modules
-			   ArrayList<IEmployee> employees = new ArrayList<IEmployee>();	// TODO: Connect Employees module
+			   ArrayList<IEmployee> employees = this.fetchEmployeeObjectsForProject(projectId);
 			   BigDecimal budgetDecimal = new BigDecimal(BigInteger.valueOf(budget));
 
 			   ProjectMock p = new ProjectMock(deadline, startDate, teams, employees, budgetDecimal);
 			   p.setId(projectId);
+			   
+			   
+			   
 			   projectsList.add(p);
 		   }
 
@@ -124,16 +150,37 @@ public void insertProject(IProject project) throws SQLException, ClassNotFoundEx
 	PreparedStatement preparedStatement = connect.prepareStatement(command);
 	preparedStatement.executeUpdate();
 	
+	// Add relationships with Employee
+	for (IEmployee employee: project.getEmployees()){
+		System.out.println("Add relationship...");
+		this.insertEmployeeRelationship(project, employee);
+	} 
+	
 	close();
+}
+
+private void insertEmployeeRelationship(IProject project, IEmployee employee) throws SQLException, ClassNotFoundException
+{
+	String command = "INSERT INTO TOProjects.IProject_Employee (employeeId, projectId) VALUES "
+			+ "(\"" + employee.getId() + "\", "
+			+ "\"" + project.getId() + "\")";
+	System.out.println(command);
+	PreparedStatement preparedStatement = connect.prepareStatement(command);
+	preparedStatement.executeUpdate();
+}
+
+private void removeAllEmployeeRelationships(IProject project) throws SQLException, ClassNotFoundException
+{
+	String command = "DELETE FROM TOProjects.IProject_Employee WHERE projectId="
+			+ "\"" + project.getId() + "\"";
+	System.out.println(command);
+	PreparedStatement preparedStatement = connect.prepareStatement(command);
+	preparedStatement.executeUpdate();
 }
 
 public void updateProject(IProject project) throws SQLException, ClassNotFoundException
 {
 	connect();
-	
-//	UPDATE table_name
-//	SET column1=value1,column2=value2,...
-//	WHERE some_column=some_value;
 	
 	// Update IProject in database
 	String command = "UPDATE TOProjects.IProject SET "
@@ -147,6 +194,15 @@ public void updateProject(IProject project) throws SQLException, ClassNotFoundEx
 	PreparedStatement preparedStatement = connect.prepareStatement(command);
 	preparedStatement.executeUpdate();
 	System.out.println("DID EXECUTE");
+	
+	// Remove all Employee relationships
+	this.removeAllEmployeeRelationships(project);
+	
+	// and recreate them once again
+	for (IEmployee employee: project.getEmployees()){
+		this.insertEmployeeRelationship(project, employee);
+	}
+	
 	close();
 }
 
