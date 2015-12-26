@@ -16,6 +16,13 @@ CREATE TABLE IProject_Team (
 	FOREIGN KEY (projectId) REFERENCES IProject(projectId)
 );
 
+CREATE TABLE IProject_Employee (
+	id			INTEGER AUTO_INCREMENT PRIMARY KEY,
+	employeeId  VARCHAR(50),
+	projectId	VARCHAR(50),
+	FOREIGN KEY (projectId) REFERENCES IProject(projectId)
+);
+
 INSERT INTO IProject (projectId, deadline, startDate, budget) VALUES ("1", "2016-01-01", "2015-01-01", 10000);
 
 
