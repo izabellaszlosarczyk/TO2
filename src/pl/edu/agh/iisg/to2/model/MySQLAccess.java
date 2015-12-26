@@ -88,6 +88,7 @@ public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundEx
 			   Date sDate = resultSet.getDate("startDate");
 			   Date deadDate = resultSet.getDate("deadline");
 			   int budget = resultSet.getInt("budget");
+			   String projectId = resultSet.getString("projectId");
 			   
 			   LocalDate startDate = Instant.ofEpochMilli(sDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 			   LocalDate deadline = Instant.ofEpochMilli(deadDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -98,6 +99,7 @@ public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundEx
 			   BigDecimal budgetDecimal = new BigDecimal(BigInteger.valueOf(budget));
 
 			   ProjectMock p = new ProjectMock(deadline, startDate, teams, employees, budgetDecimal);
+			   p.setId(projectId);
 			   projectsList.add(p);
 		   }
 
@@ -106,37 +108,47 @@ public List<ProjectMock> fetchAllProjects() throws SQLException, ClassNotFoundEx
 		 } finally {
 		   close();
 		 }
-	 System.out.println("ok");
 	return projectsList;
 }
 
 public void insertProject(IProject project) throws SQLException, ClassNotFoundException
 {
 	connect();
-	
-	System.out.println("Tworz statement");
-	System.out.println(project.getId());
-	System.out.println(project.getDeadline());
-	System.out.println(project.getStartdate());
-	System.out.println(project.getBudget());
-	
+
+	// Insert new IProject into database
 	String command = "INSERT INTO TOProjects.IProject (projectId, deadline, startDate, budget) VALUES "
 			+ "(\"" + project.getId() + "\", "
 			+ "\"" + project.getDeadline().getValue() + "\", "
 			+ "\"" + project.getStartdate().getValue() + "\", "
 			+ project.getBudget().getValue() + ")";
-	
-	System.out.println(command);
-	
 	PreparedStatement preparedStatement = connect.prepareStatement(command);
-	
-	System.out.println("Statement: " + preparedStatement);
 	preparedStatement.executeUpdate();
-	System.out.println("did execute");
 	
 	close();
 }
 
+public void updateProject(IProject project) throws SQLException, ClassNotFoundException
+{
+	connect();
+	
+//	UPDATE table_name
+//	SET column1=value1,column2=value2,...
+//	WHERE some_column=some_value;
+	
+	// Update IProject in database
+	String command = "UPDATE TOProjects.IProject SET "
+			+ "deadline=" + "\"" + project.getDeadline().getValue() + "\", "
+			+ "startDate=" + "\"" + project.getStartdate().getValue() + "\", "
+			+ "budget=" + project.getBudget().getValue()
+			+ " WHERE projectId=" + "\"" + project.getId() + "\";";
+	
+	System.out.println(command);
+	
+	PreparedStatement preparedStatement = connect.prepareStatement(command);
+	preparedStatement.executeUpdate();
+	System.out.println("DID EXECUTE");
+	close();
+}
 
 private void writeMetaData(ResultSet resultSet) throws SQLException {
  //   Now get some metadata from the database
