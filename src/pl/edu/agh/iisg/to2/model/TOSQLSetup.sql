@@ -1,4 +1,9 @@
+CREATE DATABASE IF NOT EXISTS toprojects;
+
+USE toprojects;
+
 DROP TABLE IProject_Team;
+DROP TABLE IProject_Employee;
 DROP TABLE IProject;
 
 CREATE TABLE IProject (
@@ -25,7 +30,7 @@ CREATE TABLE IProject_Employee (
 
 INSERT INTO IProject (projectId, deadline, startDate, budget) VALUES ("1", "2016-01-01", "2015-01-01", 10000);
 
-
+/*
 --DROP TABLE IProject;
 --------------------------------------------------------------------
 ------- TEGO NIE TWORZYMY. To powinno byc w innych modulach--------
@@ -47,3 +52,4 @@ INSERT INTO IProject (projectId, deadline, startDate, budget) VALUES ("1", "2016
 --	teamId		INT,
 --	name		VARCHAR(50)
 --);
+*/
