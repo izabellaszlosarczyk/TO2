@@ -39,6 +39,7 @@ import pl.edu.agh.iisg.to2.Main;
 import pl.edu.agh.iisg.to2.model.GeneratedData;
 import pl.edu.agh.iisg.to2.model.IEmployee;
 import pl.edu.agh.iisg.to2.model.ITeam;
+import pl.edu.agh.iisg.to2.model.MySQLAccess;
 import pl.edu.agh.iisg.to2.model.ProjectMock;
 import static java.lang.Math.toIntExact;
 
@@ -245,6 +246,17 @@ public class EditController {
 			ObservableList<IEmployee> etmp = FXCollections.observableArrayList();
 			etmp.addAll(FindEmployees.setEmployeesFromString(employeesTextField.getText(), employees));
 			projectEdit.setEmployees(etmp);
+		}
+		
+		saveDatabase();
+	}
+	
+	private void saveDatabase() {
+		MySQLAccess dao = new MySQLAccess();
+	    try {
+			dao.updateProject(projectEdit);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
